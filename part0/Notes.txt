@@ -1,0 +1,20 @@
+Exercise 0.1: HTML
+Hyper Text Markup Language
+- structure web page and its content
+- html element is consists of opening tag, closing tag, and content
+- <p>content here</p>
+- elements can have attributes ex. class or src
+- some elements include headings, paragraphs, lists, img, links <a href=""></a>
+- anatomy: <!DOCTYPE html> <html> <head> <meta> <title> </title> <body> ..... </body> </head> </html>
+
+Exercise 0.2: CSS
+Cascading Stylesheets
+- styling web content
+- comprised of selector, property, and property value
+- declaration = color:red;
+- different selectors can be id, class, attribute img[src], and psudo-class a:hover
+- CSS box model: padding, border, margin, content
+
+Exercise 0.3: Forms
+Passing data from user to server
+- form, label, input, textarea elements and button to submit
