@@ -1,6 +1,10 @@
-import { useState } from "react";
-
-const PersonForm = ({newName, handleNameChange, newNumber, handleNumberChange, handleAddName}) => {
+const PersonForm = ({
+  newName,
+  handleNameChange,
+  newNumber,
+  handleNumberChange,
+  handleAddName,
+}) => {
   return (
     <form>
       <div>

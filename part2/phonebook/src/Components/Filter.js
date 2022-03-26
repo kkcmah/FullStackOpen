@@ -1,4 +1,4 @@
-const Filter = ({filterName, handleFilterChange}) => {
+const Filter = ({ filterName, handleFilterChange }) => {
   return (
     <div>
       filter shown with{" "}
