@@ -1,0 +1,18 @@
+Mar 26, 2022
+- use let and const
+- arrays push, forEach function iteration
+- react immutable paradigm ex. using concat instead of push
+    - concat creates new array with content of old and new
+    - arr2 = arr1.concat(5)
+- map create new array with function used to create items
+    - arr.map(value => "<li>" + value + "</li>")
+- destructuring to assign items of array to variables
+    - const [first, second, ...rest] = arr
+- objects properties and values
+    - const obj = {name: {first: "aa", last: "bb"}, grades: [1,2,3]}
+    - values can be any type number, string, boolean, obj, array
+    - reference properties using dot or brackets obj.field obj[fieldName]
+    - can also create new property using dor or brackets
+- functions
+    - const myFunc = () => {console.log("here")}
+    
