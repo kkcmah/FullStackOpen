@@ -1,0 +1,13 @@
+continue intro to React
+look at rendering data collection, submitting data using html forms
+fetching and handling data stored in backend
+adding css styles
+js higher order array functions map, filter, reduce, find
+- using map to render a collection
+- notes.map(note => <li>{note.content}</li>)
+- key attribute that lets React determine how to update view when component is rerendered
+- map creates new array using function to map values from original array
+- dont use array index as keys
+modules are files
+- import ReactDOM from 'react-dom'
+- the module react-dom is placed into variable ReactDOM
