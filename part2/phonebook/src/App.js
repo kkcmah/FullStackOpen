@@ -10,8 +10,16 @@ const App = () => {
 
   const handleAddName = (event) => {
     event.preventDefault();
+    if (nameExists(newName)) {
+      alert(`${newName} is already added to phonebook`);
+      return;
+    }
     setPersons([...persons, { name: newName }]);
     setNewName("");
+  };
+
+  const nameExists = (name) => {
+    return persons.findIndex((person) => person.name === name) !== -1;
   };
 
   return (
