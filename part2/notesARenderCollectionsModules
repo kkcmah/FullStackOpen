@@ -11,3 +11,9 @@ js higher order array functions map, filter, reduce, find
 modules are files
 - import ReactDOM from 'react-dom'
 - the module react-dom is placed into variable ReactDOM
+===part b Forms ===
+on button type="submit" use event.preventDefault() to prevent button click from reloading page
+controlled component
+- set state to input element's value attribute
+- register event handler to onChange to synchronize changes
+array filter method to get array that match the filter function
