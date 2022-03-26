@@ -15,4 +15,20 @@ Mar 26, 2022
     - can also create new property using dor or brackets
 - functions
     - const myFunc = () => {console.log("here")}
-    
+- this keyword refers to the object itself
+    - arrow functions and functions defined using function keyword behave different with 'this'
+    - when calling method through reference the value of this becomes so called global object and behaves differently usually undefined
+        - calling method in obj function that has ex.log this.name
+        - can use bind to preserve 'this' setTimeout(arto.greet.bind(arto), 1000)
+- classes
+    - js classes simulated object orientated nature
+    - Class Person {
+        constructor(name, age) {
+            this.name = name;
+            this.age = age;
+        }
+        greet() {
+            console.log("hi name=" + this.name)
+        }
+    }
+    const adam = new Person("Adam aa", 30);

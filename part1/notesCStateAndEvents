@@ -1,0 +1,37 @@
+Component helper functions = functions in functions
+destructuring to extract values of object properties into variables
+- const {name, age} = props
+- can destructure at start of Component
+    - const Hello = ({name, age}) => ....
+stateful component
+- useState function
+    - import useState from react
+    - const [ counter, setCounter ] = useState(0)
+    - initial value of what is entered
+    - when state moifying setCounter is called react rerenders
+event handling
+- register mouse event ex
+    -<button onClick={handleClick}>
+- register function not function call for most classes
+ - not <button onClick={setCounter(counter + 1)}>
+ - but <button onClick={() => setCounter(counter + 1)}> 
+ - or <button onClick={increaseByOne}> 
+passing state to child components
+- lift state up to shared ancestor
+====d: more complex state and debugging react apps===
+complex state
+- multiple useStates
+- object spread syntax
+    - creates new object with copies of all its properties and can specify which to modify
+    - { ...clicks, right: clicks.right + 1 }
+- note to not mutate state directly because it may cause unwanted side effects
+- always set state to new object
+debugging
+- log using comma console.log('props value is', props)
+- logging using + with objects is often uninformative
+- can write debugger to pause execution
+rule of hooks
+- useState function must not be called from inside of a loop, a conditional expression, or any place that is not a function defining a component
+- hooks must be called in same order
+function that returns function for common functionality
+don't define component within component
