@@ -56,3 +56,8 @@ if both property fields and variable names are the same then we can just write o
     - const person = {name, age}
 - catch method to handle rejected promises
 - when application makes HTTP request we are making a promise chain
+===part e adding styles to react app===
+css consists of selectors and declaration
+css rule can have any amount of properties
+classes = .className syntax
+inline styles
