@@ -37,3 +37,22 @@ call to state updating function triggers rerendering of component
 - first is function; the effect itself
 - second is to specify how often the effect is run
 - by default effects run after every completed render
+===part d altering data in server===
+REST
+individual data objects are reffered to as resources
+HTTP GET to retrieve
+HTTP POST to create new resource
+ setNotes(notes.concat(response.data))
+ concat method creates a new copy of the list with item added to end
+ template literals using backticks and $ console.log(`hi ${name}`)
+can replace resource using HTTP PUT
+or can modify part of it using HTTP PATCH
+extract backend communication into its own seperate module
+- usually put in services directory
+then method of a promise is also a promise
+clearer syntax for defining object literals
+if both property fields and variable names are the same then we can just write one
+- ex. const person = {name: name, age: age} can be simplified to
+    - const person = {name, age}
+- catch method to handle rejected promises
+- when application makes HTTP request we are making a promise chain
