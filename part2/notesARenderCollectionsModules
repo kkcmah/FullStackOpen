@@ -17,3 +17,23 @@ controlled component
 - set state to input element's value attribute
 - register event handler to onChange to synchronize changes
 array filter method to get array that match the filter function
+===part c getting data from server===
+use fetch based on promises instead of old XHR
+js runtime environments follow asynchronous model with non blocking IO
+at some point after asynchronous operation completes, event handler is called
+js engines are single-threaded
+web workers to run parellel code
+npm node package manager
+axios library for communication between browser and server
+npm install json-server --save-dev to install library for assistance during development
+promise - object representing eventual completion or failure of an asynchronous operation
+- 3 states: pending, fulfilled, rejected
+- use then as event handler to access result of operation represented by promise
+effect hooks
+- effect hooks lets you perform side effects in function components
+    -data fetching, setting up subscriptions, and manually chaning the dom
+call to state updating function triggers rerendering of component
+- useEffect takes two parameters useEffect(hook, [])
+- first is function; the effect itself
+- second is to specify how often the effect is run
+- by default effects run after every completed render
