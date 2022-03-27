@@ -48,6 +48,34 @@ app.get("/info", (request, response) => {
     <p>${curDate}</p>`);
 });
 
+app.post("/api/persons", (request, response) => {
+  const body = request.body;
+  // check if content type is one that is expected
+  //console.log(request.headers);
+  console.log(body);
+  if (!body.name) {
+    return response.status(400).json({
+      error: "name is missing",
+    });
+  }
+  if (!body.number) {
+    return response.status(400).json({
+      error: "number is missing",
+    });
+  }
+  const nameExists = persons.findIndex(person => person.name === body.name) !== -1;
+  if (nameExists) {
+    return response.status(400).json({
+        error: 'name must be unique',
+      });
+  }
+
+  const id = Math.floor(Math.random() * 200);
+  const person = { id, name: body.name, number: body.number };
+  persons = [...persons, person];
+  response.json(person);
+});
+
 app.delete("/api/persons/:id", (request, response) => {
   const id = +request.params.id;
   persons = persons.filter((person) => person.id !== id);
