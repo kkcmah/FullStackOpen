@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 
 import Filter from "./Components/Filter";
 import PersonForm from "./Components/PersonForm";
@@ -37,10 +36,12 @@ const App = () => {
       alert(`${newName} is already added to phonebook`);
       return;
     }
-    personService.create({
-      name: newName,
-      number: newNumber,
-    }).then(person => setPersons([...persons, person]))
+    personService
+      .create({
+        name: newName,
+        number: newNumber,
+      })
+      .then((person) => setPersons([...persons, person]));
     setNewName("");
     setNewNumber("");
   };
@@ -52,6 +53,14 @@ const App = () => {
   const filteredPersons = persons.filter((person) =>
     person.name.toLocaleLowerCase().includes(filterName.toLocaleLowerCase())
   );
+
+  const handleDelete = (id) => {
+    const delPerson = persons.find((person) => person.id === id).name;
+    if (window.confirm(`Delete ${delPerson} ? ${id}`)) {
+      personService.deletePerson(id);
+      setPersons(persons.filter((person) => person.id !== id));
+    }
+  };
 
   return (
     <div>
@@ -69,7 +78,7 @@ const App = () => {
         handleAddName={handleAddName}
       ></PersonForm>
       <h2>Numbers</h2>
-      <Persons persons={filteredPersons}></Persons>
+      <Persons persons={filteredPersons} handleDelete={handleDelete}></Persons>
     </div>
   );
 };
