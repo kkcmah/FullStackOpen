@@ -1,0 +1,24 @@
+Implementing simple REST API in Node.js using Express
+data stored in MongoDB
+===part a Node.js and Express===
+Node is js runtime
+Node uses CommonJS modules that are imported using requires
+Express is a back end web application framework for Node.js
+trainsitive dependencies = dependencies of dependecies and so on
+JSON.stringify to send objects
+express handles automatically using response.json(obj)
+nodemon watches files in directory and restarts if anything changes
+"dev": "nodemon index.js", added to script and run npm run dev
+REST Representational State Transfer
+Every resource has an associated URL which is the resource's unique address.
+define route with parameters for fetching a single resource
+- app.get('/api/notes/:id', (request, res...
+id parameter can be access in request object
+- const id = request.params.id
+- parameter is string convert to number using Number() or +
+ response.status(404).end() status method to set status and end to respond with no data
+ can use postman or VS code REST client plugin to check HTTP requests
+ In order to access the data easily, we need the help of the express json-parser that is taken to use with command app.use(express.json()).
+ make sure content-type header is set to one that is handled by server
+ - application/json
+ 
