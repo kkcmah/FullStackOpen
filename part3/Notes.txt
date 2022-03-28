@@ -21,4 +21,14 @@ id parameter can be access in request object
  In order to access the data easily, we need the help of the express json-parser that is taken to use with command app.use(express.json()).
  make sure content-type header is set to one that is handled by server
  - application/json
- 
+ request types should be safe and idempotence according to the standard
+ safety means executing request must not cause any side effects ie changing state of database
+ -idempotence if request has side effects then result should be the same no matter how many times request is made
+ POST is neither safe or idempotent
+ json-parser is example of middleware
+ middleware are functions for handling request and response objects
+ can make own middleware as a function with three parameters
+ - const requestLogger = (request, response, next) => {
+middleware functions are called in the order that they're taken into use with express server
+app.use(requestLogger)
+
