@@ -32,4 +32,12 @@ id parameter can be access in request object
 middleware functions are called in the order that they're taken into use with express server
 app.use(requestLogger)
 note to not log any private information because it may violate privacy laws
+===part b deploying app to internet ===
+CORS Cross-Origin Resource Sharing
+- mechanism that allows restricted resources to be accessed from another domain outside of where the resource literals
+npm install cors
+const cors=require('cors')
+app.use(cors())
+heroku to deploy backend add procfile and modify port to use process.env.port
+react app production build can be created using npm run build
 
