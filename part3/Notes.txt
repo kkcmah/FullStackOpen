@@ -31,4 +31,5 @@ id parameter can be access in request object
  - const requestLogger = (request, response, next) => {
 middleware functions are called in the order that they're taken into use with express server
 app.use(requestLogger)
+note to not log any private information because it may violate privacy laws
 
