@@ -111,14 +111,23 @@ app.post("/api/persons", (request, response, next) => {
     });
   }
 
-  const person = new Person({ name: body.name, number: body.number });
+  // dont allow adding name that is already in phonebook
+  Person.findOne({ name: body.name }).then((existingPerson) => {
+    if (existingPerson) {
+      return response.status(400).json({
+        error: `${body.name} is already in phonebook with number ${existingPerson.number}`,
+      });
+    } else {
+      const person = new Person({ name: body.name, number: body.number });
 
-  person
-    .save()
-    .then((savedPerson) => {
-      response.json(savedPerson);
-    })
-    .catch((error) => next(error));
+      person
+        .save()
+        .then((savedPerson) => {
+          response.json(savedPerson);
+        })
+        .catch((error) => next(error));
+    }
+  });
 });
 
 app.delete("/api/persons/:id", (request, response, next) => {
