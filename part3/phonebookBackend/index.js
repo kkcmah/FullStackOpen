@@ -24,28 +24,6 @@ const assignId = (req, res, next) => {
 app.use(assignId);
 app.use(morgan(":url :method :id :response-time :body"));
 
-let persons = [
-  {
-    id: 1,
-    name: "Arto Hellas",
-    number: "040-123456",
-  },
-  {
-    id: 2,
-    name: "Ada Lovelace",
-    number: "39-44-5323523",
-  },
-  {
-    id: 3,
-    name: "Dan Abramov",
-    number: "12-43-234345",
-  },
-  {
-    id: 4,
-    name: "Mary Poppendieck",
-    number: "39-23-6423122",
-  },
-];
 app.get("/hello", (request, response) => {
   response.send("<h1>Hello World!</h1>");
 });
@@ -70,7 +48,7 @@ app.get("/api/persons/:id", (request, response, next) => {
     .catch((error) => next(error));
 });
 
-app.get("/info", (request, response, next) => {
+app.get("/info", (request, response) => {
   const curDate = new Date();
   Person.count({}).then((num) => {
     response.send(`<p>Phonebook has info for ${num} people</p>
@@ -133,7 +111,7 @@ app.post("/api/persons", (request, response, next) => {
 app.delete("/api/persons/:id", (request, response, next) => {
   //return 204 if successfully removed existing or not existing resource in database
   Person.findByIdAndRemove(request.params.id)
-    .then((result) => {
+    .then(() => {
       response.status(204).end();
     })
     .catch((error) => next(error));

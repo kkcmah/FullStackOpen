@@ -90,7 +90,7 @@ const App = () => {
   const handleDelete = (id) => {
     const delPerson = persons.find((person) => person.id === id).name;
     if (window.confirm(`Delete ${delPerson} ? ${id}`)) {
-      personService.deletePerson(id).catch((error) => {
+      personService.deletePerson(id).catch(() => {
         showMsg(
           "error",
           `Information of ${delPerson} has already been removed from the server`

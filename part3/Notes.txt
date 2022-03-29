@@ -90,4 +90,10 @@ when using findOneAndUpdate mongoose doesnt automatically run validation
 trigger by passing config object and set context option to query
 { new:true, runValidators: true, context: 'query' }
 ^^ optional new:true to use new obj in event handler callback
+lint/linter
+- any tool that detects and flags error in programming languages including syntax
+- static analysis of code
+npm install eslint --save-dev
+can initialize default configs with
+npx eslint --init
 
