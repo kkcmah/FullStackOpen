@@ -40,4 +40,22 @@ const cors=require('cors')
 app.use(cors())
 heroku to deploy backend add procfile and modify port to use process.env.port
 react app production build can be created using npm run build
+once build folder is made can put on backend and use a relative baseUrl
+then add proxy in package.json to ensure dev works
+ "proxy": "http://localhost:3001"
+===part c saving data to MongoDB===
+can use node --inspect index.js and clicking node icon in chrome developer tools
+to open up sources tab and set breakpoints for debugging
+full stack has many potential areas for bugs frontend backend database and one must utilize all tools to find em
+mongoDB is a so-called nosql or document database as opposed to relational databases
+mongoDB stores data records as BSON documents which are binary representations of JSON documents
+Mongoose library offers a higher level API for connecting to db
+Mongoose is a object document mapper ODM and saving js objects as mongo documents is easily
+can create db using web app but is not neccessary since mongodb atlas automatically creates db when an app tries to connect to one that doesnt exist
+define schema and matching model for data resource
+document databases like mongo are schemaless meaning database itself does not care about the structure of the data in it
+models are constructor functions that create new js objects based on the provided parameters
+saving to db happens with save() method that can be provided with then() event handler
+mongoose.connection.close() in the then() callback else the program will never finish its execution
+find() method of the constructor model can be used to retrieve db objects
 

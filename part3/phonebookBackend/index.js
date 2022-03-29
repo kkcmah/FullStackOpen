@@ -5,6 +5,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static("build"));
 
 morgan.token("id", function getId(req) {
   return req.id;
@@ -43,7 +44,7 @@ let persons = [
     number: "39-23-6423122",
   },
 ];
-app.get("/", (request, response) => {
+app.get("/hello", (request, response) => {
   response.send("<h1>Hello World!</h1>");
 });
 
