@@ -50,28 +50,35 @@ app.get("/hello", (request, response) => {
   response.send("<h1>Hello World!</h1>");
 });
 
-app.get("/api/persons", (request, response) => {
-  Person.find({}).then((persons) => {
-    response.json(persons);
+app.get("/api/persons", (request, response, next) => {
+  Person.find({})
+    .then((persons) => {
+      response.json(persons);
+    })
+    .catch((error) => next(error));
+});
+
+app.get("/api/persons/:id", (request, response, next) => {
+  Person.findById(request.params.id)
+    .then((person) => {
+      if (person) {
+        response.json(person);
+      } else {
+        response.status(404).end();
+      }
+    })
+    .catch((error) => next(error));
+});
+
+app.get("/info", (request, response, next) => {
+  const curDate = new Date();
+  Person.count({}).then((num) => {
+    response.send(`<p>Phonebook has info for ${num} people</p>
+    <p>${curDate}</p>`);
   });
 });
 
-app.get("/api/persons/:id", (request, response) => {
-  const id = +request.params.id;
-  const person = persons.find((person) => person.id === id);
-  if (!person) {
-    return response.status(404).end();
-  }
-  response.json(person);
-});
-
-app.get("/info", (request, response) => {
-  const curDate = new Date();
-  response.send(`<p>Phonebook has info for ${persons.length} people</p>
-    <p>${curDate}</p>`);
-});
-
-app.put("/api/persons/:id", (request, response) => {
+app.put("/api/persons/:id", (request, response, next) => {
   const body = request.body;
   const person = { number: body.number };
   //optional { new: true }parameter, which will cause our event handler to be called with the new modified document instead of the original.
@@ -82,7 +89,7 @@ app.put("/api/persons/:id", (request, response) => {
     .catch((error) => next(error));
 });
 
-app.post("/api/persons", (request, response) => {
+app.post("/api/persons", (request, response, next) => {
   const body = request.body;
   // check if content type is one that is expected
   //console.log(request.headers);
@@ -100,17 +107,8 @@ app.post("/api/persons", (request, response) => {
     });
   }
 
-  const nameExists =
-    persons.findIndex((person) => person.name === body.name) !== -1;
-  if (nameExists) {
-    return response.status(400).json({
-      error: "name must be unique",
-    });
-  }
-
-  const id = Math.floor(Math.random() * 200);
-  const person = new Person({ id, name: body.name, number: body.number });
-  persons = [...persons, person];
+  const person = new Person({ name: body.name, number: body.number });
+  
   person
     .save()
     .then((savedPerson) => {
@@ -119,7 +117,7 @@ app.post("/api/persons", (request, response) => {
     .catch((error) => next(error));
 });
 
-app.delete("/api/persons/:id", (request, response) => {
+app.delete("/api/persons/:id", (request, response, next) => {
   //return 204 if successfully removed existing or not existing resource in database
   Person.findByIdAndRemove(request.params.id)
     .then((result) => {
