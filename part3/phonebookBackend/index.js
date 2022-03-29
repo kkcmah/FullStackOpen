@@ -1,7 +1,9 @@
+require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const app = express();
+const Person = require("./models/person");
 
 app.use(cors());
 app.use(express.json());
@@ -49,7 +51,9 @@ app.get("/hello", (request, response) => {
 });
 
 app.get("/api/persons", (request, response) => {
-  response.json(persons);
+  Person.find({}).then((persons) => {
+    response.json(persons);
+  });
 });
 
 app.get("/api/persons/:id", (request, response) => {
@@ -72,16 +76,22 @@ app.post("/api/persons", (request, response) => {
   // check if content type is one that is expected
   //console.log(request.headers);
   console.log(body);
+  if (body.content === undefined) {
+    return response.status(400).json({ error: "content missing" });
+  }
+
   if (!body.name) {
     return response.status(400).json({
       error: "name is missing",
     });
   }
+
   if (!body.number) {
     return response.status(400).json({
       error: "number is missing",
     });
   }
+
   const nameExists =
     persons.findIndex((person) => person.name === body.name) !== -1;
   if (nameExists) {
@@ -91,9 +101,11 @@ app.post("/api/persons", (request, response) => {
   }
 
   const id = Math.floor(Math.random() * 200);
-  const person = { id, name: body.name, number: body.number };
+  const person = new Person({ id, name: body.name, number: body.number });
   persons = [...persons, person];
-  response.json(person);
+  person.save().then((savedPerson) => {
+    response.json(savedPerson);
+  });
 });
 
 app.delete("/api/persons/:id", (request, response) => {
@@ -102,7 +114,7 @@ app.delete("/api/persons/:id", (request, response) => {
   response.status(204).end();
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

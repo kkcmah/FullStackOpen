@@ -58,4 +58,12 @@ models are constructor functions that create new js objects based on the provide
 saving to db happens with save() method that can be provided with then() event handler
 mongoose.connection.close() in the then() callback else the program will never finish its execution
 find() method of the constructor model can be used to retrieve db objects
+use dotenv library to handle environment variables
+npm install dotenv and put .env file in root with env variables
+- PORT = 3001 example
+important to import dotenv before model is imported so that .env vars are available globally
+require('dotenv').config()
+add config vars to heroku
+most efficient to test backend expansions using Postman or browser
+instead of only using frontend to test
 
