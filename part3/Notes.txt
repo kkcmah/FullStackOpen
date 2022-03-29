@@ -81,4 +81,13 @@ app.use(express.json())
 middleware for unsupported routes next to last just before error handler
 findByIdAndRemove method can be used to delete individual resource
 findByIdAndUpdate method to update resource
+===part d validation and ESLint===
+Mongoose has data validation functionality to verify data format
+minLength and required validators are provided by Mongoose
+can create custom validator
+validation error name is "ValidationError" for errorHandler
+when using findOneAndUpdate mongoose doesnt automatically run validation
+trigger by passing config object and set context option to query
+{ new:true, runValidators: true, context: 'query' }
+^^ optional new:true to use new obj in event handler callback
 

@@ -53,7 +53,8 @@ const App = () => {
               )
             );
             showMsg("success", `Updated ${response.name}`);
-          });
+          })
+          .catch((error) => showMsg("error", error.response.data.error));
       }
       return;
     }
@@ -62,11 +63,11 @@ const App = () => {
         name: newName,
         number: newNumber,
       })
-      .then((person) => {
-        setPersons([...persons, person]);
+      .then((createdPerson) => {
+        setPersons([...persons, createdPerson]);
         showMsg("success", `Added ${newName}`);
       })
-      .catch((error) => showMsg("error", `Failed to add ${newName}`));
+      .catch((error) => showMsg("error", error.response.data.error));
     setNewName("");
     setNewNumber("");
   };
@@ -91,7 +92,8 @@ const App = () => {
     if (window.confirm(`Delete ${delPerson} ? ${id}`)) {
       personService.deletePerson(id).catch((error) => {
         showMsg(
-          "error", `Information of ${delPerson} has already been removed from the server`
+          "error",
+          `Information of ${delPerson} has already been removed from the server`
         );
       });
       setPersons(persons.filter((person) => person.id !== id));
