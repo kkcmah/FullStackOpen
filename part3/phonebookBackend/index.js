@@ -71,6 +71,17 @@ app.get("/info", (request, response) => {
     <p>${curDate}</p>`);
 });
 
+app.put("/api/persons/:id", (request, response) => {
+  const body = request.body;
+  const person = { number: body.number };
+  //optional { new: true }parameter, which will cause our event handler to be called with the new modified document instead of the original.
+  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+    .then((updatedPerson) => {
+      response.json(updatedPerson);
+    })
+    .catch((error) => next(error));
+});
+
 app.post("/api/persons", (request, response) => {
   const body = request.body;
   // check if content type is one that is expected
