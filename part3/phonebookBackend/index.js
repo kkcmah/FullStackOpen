@@ -106,9 +106,12 @@ app.post("/api/persons", (request, response) => {
 });
 
 app.delete("/api/persons/:id", (request, response) => {
-  const id = +request.params.id;
-  persons = persons.filter((person) => person.id !== id);
-  response.status(204).end();
+  //return 204 if successfully removed existing or not existing resource in database
+  Person.findByIdAndRemove(request.params.id)
+    .then((result) => {
+      response.status(204).end();
+    })
+    .catch((error) => next(error));
 });
 
 const PORT = process.env.PORT;

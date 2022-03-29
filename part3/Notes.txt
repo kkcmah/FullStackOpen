@@ -66,4 +66,19 @@ require('dotenv').config()
 add config vars to heroku
 most efficient to test backend expansions using Postman or browser
 instead of only using frontend to test
+good idea to console log errors when dealing with promises
+- catch(error => console.log(error))
+implement all error handling in single place is a good idea
+moving error handling into middleware
+Express error handlers are middleware defined with functions that accepts 4 parameters
+- ex. const errorHandler = (error, request, response, next)
+error handling has to be last middleware!
+- app.use errorHandler
+execution order of middleware is the same as the order in which they are loaded into express with app.use
+json-parser middleware should be among the first
+else request body would be undefined
+app.use(express.json())
+middleware for unsupported routes next to last just before error handler
+findByIdAndRemove method can be used to delete individual resource
+findByIdAndUpdate method to update resource
 
