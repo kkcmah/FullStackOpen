@@ -76,9 +76,6 @@ app.post("/api/persons", (request, response) => {
   // check if content type is one that is expected
   //console.log(request.headers);
   console.log(body);
-  if (body.content === undefined) {
-    return response.status(400).json({ error: "content missing" });
-  }
 
   if (!body.name) {
     return response.status(400).json({
