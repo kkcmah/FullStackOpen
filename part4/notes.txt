@@ -1,0 +1,13 @@
+In this part we will continue work on backend
+themes are writing unit and integration testing
+finishing up with implementing user authentication and autorization
+===part a structure of backend, intro to testing===
+should structure backend into controllers, models, utils
+event handlers of routes are referred to as controllers
+const notesRouter = require('express').Router()
+module exports router to be available to all consumers of module
+express router object in an isolated instance of middleware and routes
+router is a middleware used for defining related routes in single place
+-const notesRouter = require('./controllers/notes')
+-app.use('/api/notes', notesRouter)
+
