@@ -39,9 +39,36 @@ const mostBlogs = (blogs) => {
   return most;
 };
 
+// returns author and like count for author with most likes
+const mostLikes = (blogs) => {
+  if (blogs.length === 0) return {};
+  let authorDict = {};
+  for (const blog of blogs) {
+    if (authorDict[blog.author] === undefined) {
+      authorDict[blog.author] = blog.likes;
+    } else {
+      authorDict[blog.author]+= blog.likes ;
+    }
+  }
+  let most = {
+    likes: 0,
+  };
+  for (const prop in authorDict) {
+    if (!authorDict.hasOwnProperty(prop)) continue;
+    if (authorDict[prop] > most.likes) {
+      most = {
+        author: prop,
+        likes: authorDict[prop],
+      };
+    }
+  }
+  return most;
+};
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
   mostBlogs,
+  mostLikes
 };
