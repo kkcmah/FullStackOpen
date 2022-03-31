@@ -10,4 +10,32 @@ express router object in an isolated instance of middleware and routes
 router is a middleware used for defining related routes in single place
 -const notesRouter = require('./controllers/notes')
 -app.use('/api/notes', notesRouter)
+testing node applications
+unit testing
+jest testing library developed by Facebook
+npm install --save-dev jest
+"test": "jest --verbose" in scripts
+also add to end of package.json 
+"jest": {
+   "testEnvironment": "node"
+ }
+test may look like such
+const reverse = require('../utils/for_testing').reverse
+test('reverse of a', () => {
+  const result = reverse('a')
 
+  expect(result).toBe('a')
+})
+-Expect wraps the resulting value into an object that offers a collection of matcher functions
+can wrap tests in a describe block
+describe('average', () => {
+    // tests
+})
+describe blocks for shared setup or teardown
+test files should be in a tests directory and end with
+-.test.js
+alternatively can put jest config file jest.config.js
+and define execution environment there
+module.exports = {
+  testEnvironment: 'node',
+}
