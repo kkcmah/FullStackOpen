@@ -39,3 +39,4 @@ and define execution environment there
 module.exports = {
   testEnvironment: 'node',
 }
+can run single test with the only method
