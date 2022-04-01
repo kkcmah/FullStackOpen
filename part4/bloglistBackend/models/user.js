@@ -5,6 +5,12 @@ const userSchema = new mongoose.Schema({
   // do not test password restritions with mongoose validators because request pass !== db pass
   passwordHash: String,
   name: String,
+  blogs: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Blog",
+    },
+  ],
 });
 
 const User = mongoose.model("User", userSchema);
