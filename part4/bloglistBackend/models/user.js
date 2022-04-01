@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-  username: String,
+  username: { type: String, required: true, minlength: 3 },
+  // do not test password restritions with mongoose validators because request pass !== db pass
   passwordHash: String,
   name: String,
 });
