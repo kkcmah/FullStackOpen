@@ -128,6 +128,50 @@ describe("deletion of a blog", () => {
   });
 });
 
+describe("updating a blog", () => {
+  test("successfully updates the blog", async () => {
+    const blogsAtStart = await helper.blogsInDb();
+    const blogToUpdate = {
+      ...blogsAtStart[0], 
+      title: "updated title",
+      author: "updated author",
+      url: "updated url",
+      likes: 123
+    };
+
+    await api
+    .put(`/api/blogs/${blogToUpdate.id}`)
+    .send(blogToUpdate)
+    .expect(200);
+
+    const blogsAtEnd = await helper.blogsInDb();
+
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length);
+
+    expect(blogsAtEnd).toContainEqual(blogToUpdate);
+    
+  });
+
+  test("fails with code 400 if likes is not a type of number", async () => {
+    const blogsAtStart = await helper.blogsInDb();
+    const blogToUpdate = {
+      ...blogsAtStart[0], 
+      likes: "im a string"
+    };
+
+    await api
+    .put(`/api/blogs/${blogToUpdate.id}`)
+    .send(blogToUpdate)
+    .expect(400);
+
+    const blogsAtEnd = await helper.blogsInDb();
+
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length);
+    expect(blogsAtEnd).toContainEqual(blogsAtStart[0]);
+    
+  });
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });
