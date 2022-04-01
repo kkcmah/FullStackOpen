@@ -66,37 +66,53 @@ test("a valid blog can be added", async () => {
 });
 
 test("adding a blog missing the 'likes' property defaults 'likes' to 0", async () => {
-    const newBlog = {
-      title: "new title",
-      author: "new author",
-      url: "new url",
+  const newBlog = {
+    title: "new title",
+    author: "new author",
+    url: "new url",
+  };
+
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  const response = await api.get("/api/blogs");
+
+  const updatedblogs = response.body.map((r) => {
+    return {
+      title: r.title,
+      author: r.author,
+      url: r.url,
+      likes: r.likes,
     };
-  
-    await api
-      .post("/api/blogs")
-      .send(newBlog)
-      .expect(201)
-      .expect("Content-Type", /application\/json/);
-  
-    const response = await api.get("/api/blogs");
-  
-    const updatedblogs = response.body.map((r) => {
-      return {
-        title: r.title,
-        author: r.author,
-        url: r.url,
-        likes: r.likes,
-      };
-    });
-  
-    expect(response.body).toHaveLength(helper.initialBlogs.length + 1);
-    expect(updatedblogs).toContainEqual({
-      title: "new title",
-      author: "new author",
-      url: "new url",
-      likes: 0,
-    });
   });
+
+  expect(response.body).toHaveLength(helper.initialBlogs.length + 1);
+  expect(updatedblogs).toContainEqual({
+    title: "new title",
+    author: "new author",
+    url: "new url",
+    likes: 0,
+  });
+});
+
+test("adding a blog missing the title and url properties respond with 400 bad request", async () => {
+  const newBlog = {
+    author: "new author",
+    likes: 2,
+  };
+
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(400)
+
+  const response = await api.get("/api/blogs");
+
+  expect(response.body).toHaveLength(helper.initialBlogs.length);
+});
 
 afterAll(() => {
   mongoose.connection.close();
