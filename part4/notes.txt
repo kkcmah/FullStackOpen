@@ -40,3 +40,35 @@ module.exports = {
   testEnvironment: 'node',
 }
 can run single test with the only method
+===part b testing the backend===
+may be beneficial to mock database instead of using real one
+- library might be mongodb-memory-server
+integration testing multiple components of a system
+good practice to define separate modes for dev and testing
+modify scripts to
+"start": "NODE_ENV=production node index.js",
+"dev": "NODE_ENV=development nodemon index.js",
+"test": "NODE_ENV=test jest --verbose --runInBand"
+-runinband option prevents tests from being run in parallel
+There is a slight issue in the way that we have specified the mode of the application in our scripts: it will not work on Windows. We can correct this by installing the cross-env package as a development dependency
+- npm install cross-env
+and update scrips to 
+"start": "cross-env NODE_ENV=production node index.js"
+modify app config to use different uri endpoints
+supertest package can help write API tests
+npm install --save-dev supertest
+using async/await because API requests are asynchronous
+async/await syntax for writing code that looks like synchronous code
+beforeEach() and afterAll() jest functions for setup and teardown
+running tests in one file using
+npm test -- tests/note_api.test.js
+note that when running single test mongoose connection may still remain open because jest doesnt run the afterall code
+in order to use await operator they have to return promise
+risk of regression when refactoring - existing functionality may break
+express-async-errors library can be used to refactor away try/catch from async/await code
+- introduce in app.js require('express-async-errors')
+Promise.all method to wait for all asynchronous operations to finish executing (may occur when using async in loops)
+const results = await Promise.all(promiseArray)
+results contain resolved values for each promise in same order
+promise.all executes the promises it receives in parallel
+execute in order by using a for of loop
