@@ -72,3 +72,80 @@ const results = await Promise.all(promiseArray)
 results contain resolved values for each promise in same order
 promise.all executes the promises it receives in parallel
 execute in order by using a for of loop
+===part c user administration===
+ex. user can only modify own notes and can be easily modeled in relational db with 1 to many relationship with foreign key to user on notes
+can use object ids to reference documents in other collections
+document database doesnt demand that foreign keys be stored on the many side of 1 to many it can be either or both (array form if on 1 side)
+relational databases offer a more suitable way for organizing data because we dont know future use cases
+bcrypt package for generating password hashes
+never store plain text unencrypted passwords in db
+npm install bcrypt
+ const saltRounds = 10
+  const passwordHash = await bcrypt.hash(password, saltRounds)
+document databases do not support join queries but mongoose can do some joins for us
+relational databases are transactional - state of db does not change during time that query is made
+in mongoose nothing guarantees that state of collections are unchanged during join queries
+mongoose join done with populate method
+  const users = await User
+    .find({}).populate('notes')
+mongo syntax to get what we want
+.find({}).populate('notes', { content: 1, date: 1 })
+functionality of populate method is based on fact that we have defined types to references in schema
+ex. in note 
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }
+===part d token authentication===
+user login to use app
+user logins -> backend generates token -> browser saves token -> user saves new resource with TOKEN in header -> backend identifies user from TOKEN
+jsonwebtoken library allows us to generate JSON web tokens
+npm install jsonwebtoken
+bcrypt compare method to check pass
+passcorrect = await bcrypt.compare(body.password, user.passwordHash)
+const token = jwt.sign(userForToken, process.env.SECRET)
+environment variable SECRET can be any string
+one way to send token from browser to server is using authorization header
+authorization header tells which authorization scheme is used and how credentials should be interpreted
+Bearer scheme is suitable for us
+ex. in authorization header
+- Bearer eyJhbGciOiJIUzI1NiIsInR5c2VybmFtZSI6Im1sdXVra2FpIiwiaW
+const getTokenFrom = request => {
+  const authorization = request.get('authorization')
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    return authorization.substring(7)
+  }
+  return null
+}
+
+const token = getTokenFrom(request)
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or invalid' })
+  }
+  const user = await User.findById(decodedToken.id)
+
+jwt.verify validates token
+if no token passed returns error "jwt must be provided"
+decodedToken is object that was encoded in the first place
+return 401 error if token is wrong
+Token verification can also cause a JsonWebTokenError if token is slightly modified
+token can be faulty, falsified, or expired
+if application has multiple interfaces requiring identification JWT validation should be seperated into its own middleware
+or express-jwt library
+if access rights of token holder should be revoked
+- one way is limit validity period of token
+const token = jwt.sign(userForToken, process.env.SECRET,{ expiresIn: 60*60 })
+add error handling for expired token error.name === 'TokenExpiredError')
+- other way is to save token info in db and check each API request if access rights are still valid
+- called server side session
+-- negatives of increased complexity and effects performance but increased security
+-- token in server side session is quite often random string that doesnt include info about user
+-- cookies are often used instead of authorization header in this cases
+usernames, passwords and apps using token authentication must always be used over https
+reminder: middleware is function with 3 parameters that at end calls next() to move control to next middleware
+const tokenExtractor = (request, response, next) => {
+  // code that extracts the token
+
+  next()
+}
