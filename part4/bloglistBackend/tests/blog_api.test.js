@@ -1,8 +1,10 @@
 const mongoose = require("mongoose");
 const supertest = require("supertest");
+const jwt = require("jsonwebtoken");
 const app = require("../app");
 const api = supertest(app);
 const Blog = require("../models/blog");
+const User = require("../models/user");
 const helper = require("./test_helper");
 
 beforeEach(async () => {
@@ -31,6 +33,20 @@ describe("when there are some initial blogs saved", () => {
 });
 
 describe("addition of a new blog", () => {
+  let token;
+  beforeEach(async () => {
+    await User.deleteMany({});
+    const user = new User({ username: "root", name: "root" });
+
+    await user.save();
+    const userInDb = await User.findOne({});
+    const userForToken = {
+      username: userInDb.username,
+      id: userInDb._id,
+    };
+    token = jwt.sign(userForToken, process.env.SECRET);
+  });
+
   test("succeeds with valid data", async () => {
     const newBlog = {
       title: "new title",
@@ -41,6 +57,7 @@ describe("addition of a new blog", () => {
 
     await api
       .post("/api/blogs")
+      .set("Authorization", `Bearer ${token}`)
       .send(newBlog)
       .expect(201)
       .expect("Content-Type", /application\/json/);
@@ -74,6 +91,7 @@ describe("addition of a new blog", () => {
 
     await api
       .post("/api/blogs")
+      .set("Authorization", `Bearer ${token}`)
       .send(newBlog)
       .expect(201)
       .expect("Content-Type", /application\/json/);
@@ -104,7 +122,29 @@ describe("addition of a new blog", () => {
       likes: 2,
     };
 
-    await api.post("/api/blogs").send(newBlog).expect(400);
+    await api
+      .post("/api/blogs")
+      .set("Authorization", `Bearer ${token}`)
+      .send(newBlog)
+      .expect(400);
+    const blogsInDb = await helper.blogsInDb();
+
+    expect(blogsInDb).toHaveLength(helper.initialBlogs.length);
+  });
+
+  test("fails with 401 if user token is not valid", async () => {
+    const newBlog = {
+      title: "new title",
+      author: "new author",
+      url: "new url",
+      likes: 3,
+    };
+
+    await api
+      .post("/api/blogs")
+      .set("Authorization", `Bearer invalidtoken`)
+      .send(newBlog)
+      .expect(401);
     const blogsInDb = await helper.blogsInDb();
 
     expect(blogsInDb).toHaveLength(helper.initialBlogs.length);
@@ -132,43 +172,41 @@ describe("updating a blog", () => {
   test("successfully updates the blog", async () => {
     const blogsAtStart = await helper.blogsInDb();
     const blogToUpdate = {
-      ...blogsAtStart[0], 
+      ...blogsAtStart[0],
       title: "updated title",
       author: "updated author",
       url: "updated url",
-      likes: 123
+      likes: 123,
     };
 
     await api
-    .put(`/api/blogs/${blogToUpdate.id}`)
-    .send(blogToUpdate)
-    .expect(200);
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(blogToUpdate)
+      .expect(200);
 
     const blogsAtEnd = await helper.blogsInDb();
 
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length);
 
     expect(blogsAtEnd).toContainEqual(blogToUpdate);
-    
   });
 
   test("fails with code 400 if likes is not a type of number", async () => {
     const blogsAtStart = await helper.blogsInDb();
     const blogToUpdate = {
-      ...blogsAtStart[0], 
-      likes: "im a string"
+      ...blogsAtStart[0],
+      likes: "im a string",
     };
 
     await api
-    .put(`/api/blogs/${blogToUpdate.id}`)
-    .send(blogToUpdate)
-    .expect(400);
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(blogToUpdate)
+      .expect(400);
 
     const blogsAtEnd = await helper.blogsInDb();
 
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length);
     expect(blogsAtEnd).toContainEqual(blogsAtStart[0]);
-    
   });
 });
 
