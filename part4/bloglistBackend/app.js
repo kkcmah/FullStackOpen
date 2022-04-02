@@ -15,10 +15,13 @@ mongoose.connect(config.MONGODB_URI);
 app.use(cors());
 app.use(express.static("build"));
 app.use(express.json());
+// use the middleware in all routes
 app.use(middleware.tokenExtractor);
 
 app.use("/api/users", userRouter);
-app.use("/api/blogs", blogRouter);
+// use the middleware only in /api/blogs routes
+// via middleware chaining can also register to specific route in controller
+app.use("/api/blogs", middleware.userExtractor, blogRouter);
 app.use("/api/login", loginRouter);
 
 app.use(middleware.unknownEndpoint);
