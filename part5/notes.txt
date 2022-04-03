@@ -1,0 +1,24 @@
+Returning to frontend in this part. Looking at different possibilities for testing React code
+Implement token based authentication for user login
+===part a login in frontend===
+form with fields that synchronize changes in the field with the state in component
+conditionally render components {user === null ?
+      loginForm() :
+      noteForm()
+    }
+put headers into config in third parameter passed via axios
+ const config = {
+    headers: { Authorization: token },
+  }
+
+  const response = await axios.post(baseUrl, newObject, config)
+can save token to local storage which is a key value database in browser
+window.localStorage.setItem('name', 'juha tauriainen')
+window.localStorage.getItem('name')
+removeItem removes an item
+storage is origin specific so each web app has its own storage
+have to save objects using JSON.stringify
+and use JSON.parse with getting objects
+use effect hook to check local storage
+empty array as hooks dependency array ensures it is only run when component is rendered for the first time
+log out a user by removing the key from localStorage
