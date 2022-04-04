@@ -1,23 +1,25 @@
 import { useState } from "react";
 import loginService from "../services/login";
+import Notification from "./Notification";
 
-const Login = ({ handleUserLogin, setErrorMessage }) => {
+const Login = ({ handleUserLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [err, setErr] = useState(false);
+  const [msg, setMsg] = useState("");
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    console.log("username", username);
-    console.log("password", password);
     try {
       const user = await loginService.login({ username, password });
       setUsername("");
       setPassword("");
       handleUserLogin(user);
-    } catch (exception) {
-      setErrorMessage("Wrong credentials");
+    } catch (error) {
+      setErr(true);
+      setMsg("wrong username or password");
       setTimeout(() => {
-        setErrorMessage(null);
+        setMsg(null);
       }, 5000);
     }
   };
@@ -25,6 +27,7 @@ const Login = ({ handleUserLogin, setErrorMessage }) => {
   return (
     <div>
       <h2>Log in to application</h2>
+      <Notification msg={msg} isErr={err}></Notification>
       <form onSubmit={handleLogin}>
         <div>
           username

@@ -4,7 +4,6 @@ import Login from "./components/Login";
 import blogsService from "./services/blogs";
 
 const App = () => {
-  const [msg, setMsg] = useState(null);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -27,20 +26,19 @@ const App = () => {
     setUser(null);
   };
 
-  const setErrorMessage = (errorMsg) => {
-    setMsg(errorMsg);
-    console.log(errorMsg);
-  };
-
   if (user === null) {
     return (
       <Login
         handleUserLogin={handleUserLogin}
-        setErrorMessage={setErrorMessage}
       ></Login>
     );
   }
-  return <Blogs user={user} handleUserLogout={handleUserLogout}></Blogs>;
+  return (
+    <Blogs
+      user={user}
+      handleUserLogout={handleUserLogout}
+    ></Blogs>
+  );
 };
 
 export default App;

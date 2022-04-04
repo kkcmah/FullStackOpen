@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import Blog from "./Blog";
 import blogsService from "../services/blogs";
+import Notification from "./Notification";
 
 const Blogs = ({ user, handleUserLogout }) => {
   const [blogs, setBlogs] = useState([]);
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
+  const [err, setErr] = useState(false);
+  const [msg, setMsg] = useState("");
 
   useEffect(() => {
     const getBlogs = async () => {
@@ -27,8 +30,14 @@ const Blogs = ({ user, handleUserLogout }) => {
       setUrl("");
       const blogs = await blogsService.getAll();
       setBlogs(blogs);
+      setMsg(`a new blog ${title} by ${author} added`);
     } catch (error) {
-      console.log(error);
+      setMsg("Failed to create blog");
+      setErr(true);
+    } finally {
+      setTimeout(() => {
+        setMsg(null);
+      }, 5000);
     }
   };
 
@@ -76,6 +85,7 @@ const Blogs = ({ user, handleUserLogout }) => {
   return (
     <div>
       <h2>blogs</h2>
+      <Notification msg={msg} isErr={err}></Notification>
       <p>
         {user.name} logged in <button onClick={handleUserLogout}>Logout</button>
       </p>
