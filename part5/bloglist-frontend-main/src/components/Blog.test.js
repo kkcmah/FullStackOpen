@@ -54,8 +54,7 @@ describe("<Blog/>", () => {
   });
 
   test("clicking like button twice calls event handler in props twice", async () => {
-    // const button = container.querySelector("detail-btan");
-    const button = screen.getByText("view");
+    const button = container.querySelector(".detail-btn");
     await userEvent.click(button);
 
     const likeBtn = container.querySelector(".like-btn");
