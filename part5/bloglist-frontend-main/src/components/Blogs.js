@@ -41,6 +41,7 @@ const Blogs = ({ user, handleUserLogout }) => {
     } finally {
       setTimeout(() => {
         setMsg(null);
+        setErr(false);
       }, 5000);
     }
   };
@@ -54,6 +55,22 @@ const Blogs = ({ user, handleUserLogout }) => {
       setErr(true);
       setTimeout(() => {
         setMsg(null);
+        setErr(false);
+      }, 5000);
+    }
+  };
+
+  const handleDeleteBlog = async (blogToDelete) => {
+    try {
+      console.log(blogToDelete);
+      await blogsService.deleteBlog(blogToDelete);
+      getSortedBlogs();
+    } catch (error) {
+      setMsg("Failed to delete blog");
+      setErr(true);
+      setTimeout(() => {
+        setMsg(null);
+        setErr(false);
       }, 5000);
     }
   };
@@ -73,7 +90,13 @@ const Blogs = ({ user, handleUserLogout }) => {
         <BlogForm handleCreateBlog={handleCreateBlog}></BlogForm>
       </Togglable>
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} handleLikeBlog={handleLikeBlog} />
+        <Blog
+          key={blog.id}
+          blog={blog}
+          user={user}
+          handleLikeBlog={handleLikeBlog}
+          handleDeleteBlog={handleDeleteBlog}
+        />
       ))}
     </div>
   );
