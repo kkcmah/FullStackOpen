@@ -3,7 +3,9 @@ import { useState } from "react";
 const Blog = ({ blog, handleLikeBlog, user, handleDeleteBlog }) => {
   const [show, setShow] = useState(false);
 
-  const showRemoveBtn = blog.user?.username === user.username;
+  const showRemoveBtn = blog.user
+    ? blog.user.username === user.username
+    : false;
 
   const blogStyle = {
     paddingTop: 10,
