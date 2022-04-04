@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Blog from "./Blog";
 import blogsService from "../services/blogs";
 import Notification from "./Notification";
+import Togglable from "./Togglable";
 
 const Blogs = ({ user, handleUserLogout }) => {
   const [blogs, setBlogs] = useState([]);
@@ -10,6 +11,7 @@ const Blogs = ({ user, handleUserLogout }) => {
   const [url, setUrl] = useState("");
   const [err, setErr] = useState(false);
   const [msg, setMsg] = useState("");
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const getBlogs = async () => {
@@ -18,6 +20,10 @@ const Blogs = ({ user, handleUserLogout }) => {
     };
     getBlogs();
   }, []);
+
+  const toggleVisibility = () => {
+    setVisible(!visible);
+  };
 
   const handleCreateBlog = async (event) => {
     event.preventDefault();
@@ -31,6 +37,7 @@ const Blogs = ({ user, handleUserLogout }) => {
       const blogs = await blogsService.getAll();
       setBlogs(blogs);
       setMsg(`a new blog ${title} by ${author} added`);
+      setVisible(false);
     } catch (error) {
       setMsg("Failed to create blog");
       setErr(true);
@@ -89,7 +96,13 @@ const Blogs = ({ user, handleUserLogout }) => {
       <p>
         {user.name} logged in <button onClick={handleUserLogout}>Logout</button>
       </p>
-      {createBlogForm()}
+      <Togglable
+        toggleVisibility={toggleVisibility}
+        visible={visible}
+        buttonLabel="new blog"
+      >
+        {createBlogForm()}
+      </Togglable>
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} />
       ))}

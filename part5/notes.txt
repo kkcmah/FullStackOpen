@@ -22,3 +22,34 @@ and use JSON.parse with getting objects
 use effect hook to check local storage
 empty array as hooks dependency array ensures it is only run when component is rendered for the first time
 log out a user by removing the key from localStorage
+how to cope with situation when API access of token holder needs to be revoked
+- one limit validity period of token
+-- forces app relogin if token expires
+- second save validity information of token to database known as server side session
+saving token in local storage is security risk
+- subject to cross site scripting (XSS) attacks
+can also save identity of signed in user as httpOnly cookies
+- this is subject to cross site forgery
+-- js no access to token but makes SPA more complex probably need separate page for login
+- probably best to implement both tokens and cookies and have backend construct authentication using both
+===part b props.children and proptypes===
+can set style inline using code with style attribute
+can warp components with other components
+props.children then references the child components of the component
+child components are React elements defined between opening and closing tags
+children props is automatically added by React and always exists
+component with self closing tag has empty array as props.children
+can reference component using useRef
+ex. ref={noteFormRef} and const noteFormRef = useRef();
+useRef ensures the same reference is kept throughout component rerenders
+- import { useState, forwardRef, useImperativeHandle } from 'react'
+- const Togglable = forwardRef((props, ref) => {
+  - useImperativeHandle(ref, () => {
+    return {
+      toggleVisibility
+    }
+  })
+component is wrapped in forwardref function call
+the component uses the useImperativeHandle hook to make its toggleVisibility function available outside of the component.
+can now call it via  noteFormRef.current.toggleVisibility()
+useImperativeHandle function is hook to define functions which can be invoked outside of component
