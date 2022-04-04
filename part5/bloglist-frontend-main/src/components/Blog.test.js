@@ -43,8 +43,7 @@ describe("<Blog/>", () => {
   test("clicking view button show blog's url, likes, and author", async () => {
     // const button = container.querySelector("detail-btan");
     const button = screen.getByText("view");
-    userEvent.click(button);
-    await new Promise((r) => setTimeout(r, 50));
+    await userEvent.click(button);
 
     const urlElement = screen.getByText("im a site");
     const likesElement = screen.getByText(2);
@@ -52,5 +51,17 @@ describe("<Blog/>", () => {
     expect(urlElement).toBeDefined();
     expect(likesElement).toBeDefined();
     expect(authorElement).toBeDefined();
+  });
+
+  test("clicking like button twice calls event handler in props twice", async () => {
+    // const button = container.querySelector("detail-btan");
+    const button = screen.getByText("view");
+    await userEvent.click(button);
+
+    const likeBtn = container.querySelector(".like-btn");
+    await userEvent.click(likeBtn);
+    await userEvent.click(likeBtn);
+
+    expect(mockHandlerLike.mock.calls).toHaveLength(2);
   });
 });
