@@ -66,4 +66,41 @@ npm install --save-dev eslint-plugin-jest
   node_modules
   build
   .eslintrc.js
-
+note to not run eslint --init command because latest version of eslint is probably not compatible with config file create by create-react-app
+===part c testing react apps===
+using jest testing library
+and react-testing-library to help render components
+and jest-dom for jest related helper functions
+npm install --save-dev @testing-library/react @testing-library/jest-dom
+add classname to elements to make it easier to access component in tests
+normally react components are rendered to the DOM
+render method used in tests renders it in format suitable for tests without rendering to the DOM
+by default npm test will not exit once tests have finished but
+will retest once files are changed
+file monitoring is done by facebooks Watchman https://facebook.github.io/watchman/
+CI=true npm test to run tests manually
+personal preference for where to put test files
+can be with the component tested or in separate test directory all together
+can use querySelector on container object field returned by render to get rendered elements
+const { container } = render(<Note note={note} />)
+const div = container.querySelector(".note")
+screen.debug() to print HTML to console
+user-event library to simulate user inputs
+npm install --save-dev @testing-library/user-event
+mock objects and functions are stub components to replace dependencies of component being tested
+example method uses:
+  const element = screen.getByText('Com
+  userEvent.click(button)
+  expect(mockHandler.mock.calls).toHaveLength(1)
+  expect(div).not.toHaveStyle('display: none')
+  const input = screen.getByRole('textbox')
+  userEvent.type(input, 'testing a form...' )
+  const input = screen.getByPlaceholderText('write here note content')
+  expect(createNote.mock.calls[0][0].content).toBe('testing a form...' )
+can also define id to input fields and find it using querySelector
+screen.findByText returns promise
+screen.queryByText doesnt cause exception if element is not found useful for ensuring something isnt rendered
+find out test coverage using 
+  CI=true npm test -- --coverage
+integration testing more difficult because we would have to mock server data
+Jest offers snapshot testing which compares HTML code before and after events occur
