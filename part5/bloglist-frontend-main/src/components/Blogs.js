@@ -44,6 +44,20 @@ const Blogs = ({ user, handleUserLogout }) => {
     }
   };
 
+  const handleLikeBlog = async (blogToLike) => {
+    try {
+      await blogsService.likeBlog(blogToLike);
+      const blogs = await blogsService.getAll();
+      setBlogs(blogs);
+    } catch (error) {
+      setMsg("Failed to like blog");
+      setErr(true);
+      setTimeout(() => {
+        setMsg(null);
+      }, 5000);
+    }
+  };
+
   return (
     <div>
       <h2>blogs</h2>
@@ -59,7 +73,7 @@ const Blogs = ({ user, handleUserLogout }) => {
         <BlogForm handleCreateBlog={handleCreateBlog}></BlogForm>
       </Togglable>
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} handleLikeBlog={handleLikeBlog} />
       ))}
     </div>
   );
