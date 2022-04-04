@@ -12,12 +12,14 @@ const Blogs = ({ user, handleUserLogout }) => {
   const [msg, setMsg] = useState("");
   const [visible, setVisible] = useState(false);
 
+  const getSortedBlogs = async () => {
+    let blogs = await blogsService.getAll();
+    blogs.sort((a, b) => b.likes - a.likes);
+    setBlogs(blogs);
+  };
+
   useEffect(() => {
-    const getBlogs = async () => {
-      const blogs = await blogsService.getAll();
-      setBlogs(blogs);
-    };
-    getBlogs();
+    getSortedBlogs();
   }, []);
 
   const toggleVisibility = () => {
@@ -28,8 +30,7 @@ const Blogs = ({ user, handleUserLogout }) => {
     try {
       await blogsService.createBlog(blogToCreate);
 
-      const blogs = await blogsService.getAll();
-      setBlogs(blogs);
+      getSortedBlogs();
       setMsg(
         `a new blog ${blogToCreate.title} by ${blogToCreate.author} added`
       );
@@ -47,8 +48,7 @@ const Blogs = ({ user, handleUserLogout }) => {
   const handleLikeBlog = async (blogToLike) => {
     try {
       await blogsService.likeBlog(blogToLike);
-      const blogs = await blogsService.getAll();
-      setBlogs(blogs);
+      getSortedBlogs();
     } catch (error) {
       setMsg("Failed to like blog");
       setErr(true);
