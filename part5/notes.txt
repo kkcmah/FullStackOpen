@@ -53,3 +53,17 @@ component is wrapped in forwardref function call
 the component uses the useImperativeHandle hook to make its toggleVisibility function available outside of the component.
 can now call it via  noteFormRef.current.toggleVisibility()
 useImperativeHandle function is hook to define functions which can be invoked outside of component
+proptypes
+prop-types package can be used to define expected and required component props
+import PropTypes from 'prop-types'
+Togglable.propTypes = {
+  buttonLabel: PropTypes.string.isRequired
+}
+frontend eslinting
+npm install --save-dev eslint-plugin-jest
+.eslintrc.js file with lint configs
+.eslintignore file with contents:
+  node_modules
+  build
+  .eslintrc.js
+

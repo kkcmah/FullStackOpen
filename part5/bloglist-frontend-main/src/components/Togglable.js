@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 const Togglable = ({ children, toggleVisibility, visible, buttonLabel }) => {
   const hideWhenVisible = { display: visible ? "none" : "" };
   const showWhenVisible = { display: visible ? "" : "none" };
@@ -13,6 +15,10 @@ const Togglable = ({ children, toggleVisibility, visible, buttonLabel }) => {
       </div>
     </div>
   );
+};
+
+Togglable.propTypes = {
+  buttonLabel: PropTypes.string.isRequired,
 };
 
 export default Togglable;
