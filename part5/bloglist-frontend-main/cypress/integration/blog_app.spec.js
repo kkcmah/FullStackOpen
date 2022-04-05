@@ -8,6 +8,11 @@
 describe("Blog app", function () {
   beforeEach(function () {
     cy.request("POST", "http://localhost:3003/api/testing/reset");
+    cy.request("POST", "http://localhost:3003/api/users", {
+      username: "myusername",
+      name: "myname",
+      password: "mypassword",
+    });
     cy.visit("http://localhost:3000");
   });
 
@@ -16,5 +21,24 @@ describe("Blog app", function () {
     cy.contains("username");
     cy.contains("password");
     cy.contains("Login");
+  });
+
+  describe("Login", function () {
+    it("succeeds with correct credentials", function () {
+      cy.get("input[name='Username']").type("myusername");
+      cy.get("input[name='Password']").type("mypassword");
+      cy.get("#login-btn").click();
+      cy.get("html").should("contain", "myname logged in");
+    });
+
+    it("fails with wrong credentials", function () {
+      cy.get("input[name='Username']").type("myusername");
+      cy.get("input[name='Password']").type("wrong password");
+      cy.get("#login-btn").click();
+      cy.get(".error")
+        .should("contain", "wrong username or password")
+        .and("have.css", "color", "rgb(255, 0, 0)");
+      cy.get("html").should("not.contain", "myname logged in");
+    });
   });
 });

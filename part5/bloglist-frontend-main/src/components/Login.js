@@ -52,7 +52,7 @@ const Login = ({ handleUserLogin }) => {
           ></input>
         </div>
 
-        <button type="submit">Login</button>
+        <button type="submit" id="login-btn">Login</button>
       </form>
     </div>
   );
