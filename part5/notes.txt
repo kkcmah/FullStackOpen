@@ -104,3 +104,65 @@ find out test coverage using
   CI=true npm test -- --coverage
 integration testing more difficult because we would have to mock server data
 Jest offers snapshot testing which compares HTML code before and after events occur
+===part d end to end testing===
+so far done integration and unit testing for the backend API
+now looking at end to end (E2E) tests
+can test using Selenium
+or headless browsers which are browsers with no GUI (chrome has headless mode)
+E2E tests whole system but can be challenging to make and execution time can take awhile
+E2E tests can be flaky - different results when running same code
+Cypress E2E library
+- run in browser while other libraries run in node process connected to browser via API
+install Cypress to the frontend
+npm install --save-dev cypress
+- add script
+"cypress:open": "cypress open"
+Cypress tests require the tested system to be running and do not start the system when they are run
+- add script to backend
+"start:test": "cross-env NODE_ENV=test node index.js"
+start cypress with npm run cypress:open
+when cypress first runs it creates directory with integration test examples
+cypress tests have describes and it (vs test) similar to Jest
+shouldnt use function arrow notation because it may cause unexpected behaviour no ()=>{}
+cy.visit("http://localhost:3000") cy.contains("notes")
+cy.contains("btn").click
+cy.get('#password').type('mluukkai')
+better to give form ids to refer to
+searching by text using cy.contains returns first element found
+to be able to use the cy variable:
+- npm install eslint-plugin-cypress --save-dev
+- and update .eslintrc.js with
+  -"plugins": [
+        "react", "jest", "cypress"
+    ],
+    "env": {
+        "browser": true,
+        "es6": true,
+        "jest/globals": true,
+        "cypress/globals": true
+    },
+cypress runs tests in order they are in code each test and browser state starts from 0 so must login in beforeeach block
+E2E tests do not have access to db
+- create API endpoints for testing to empty db
+- if (process.env.NODE_ENV === "test") empty db
+cy.request('POST', 'http://localhost:3001/api/testing/reset')
+alternative but more diverse contains
+cy.get('.error').should('contain', 'wrong credentials')
+cypress requires colours be given as rgb
+can chain cy.get with .and("have.css", "color", "rgb(255,0,0)")
+cypress "should" should always be chained with another command like get
+some css properties behave differently in different browsers can causes tests that pass in chrome to fail in firefox
+if we use code (login code) in multiple places can make it a custom command
+custom commands declared in cypress/support/commands.js
+Cypress.Commands.add('login', ({ username, password }) => {
+use it with cy.login({ username: 'mluukkai', password: 'salainen' })
+when chaining contains the search continues from within the component found in the first command
+check that the test runner is using the right components
+cy.contains('second note').parent().find('button').click()
+find right button and save to variable can then access using @
+  -cy.contains('second note').parent().find('button').as('theButton')
+  -cy.get('@theButton').click()
+script to run cypress from command line instead of from the graphical test runner
+- "test:e2e": "cypress run"
+can git ignore test videos saved to cypress/videos/
+
