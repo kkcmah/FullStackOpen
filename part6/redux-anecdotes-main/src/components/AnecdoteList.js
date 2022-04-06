@@ -6,8 +6,13 @@ import {
 } from "../reducers/notificationReducer";
 
 const AnecdoteList = () => {
-  const anecdotes = useSelector((state) => state.anecdotes);
-  const sortedAnecdotes = anecdotes.slice().sort((a, b) => b.votes - a.votes);
+  // can destructure from state
+  // instead of using state.anecdotes and state.filter
+  const anecdotes = useSelector(({ anecdotes, filter }) => {
+    return anecdotes.filter((anec) => anec.content.includes(filter));
+  });
+  let sortedAnecdotes = anecdotes.slice().sort((a, b) => b.votes - a.votes);
+
   const dispatch = useDispatch();
 
   const vote = (id) => {
