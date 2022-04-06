@@ -28,6 +28,8 @@ const reducer = (state = initialState, action) => {
       const anecToUpdate = state.find((a) => a.id === idToUpdate);
       const updatedAnec = { ...anecToUpdate, votes: anecToUpdate.votes + 1 };
       return state.map((anec) => (anec.id !== idToUpdate ? anec : updatedAnec));
+    case "CREATE_ANEC":
+      return [...state, action.data];
     default:
       return state;
   }
@@ -35,6 +37,13 @@ const reducer = (state = initialState, action) => {
 
 export const voteAnec = (id) => {
   return { type: "VOTE", data: id };
+};
+
+export const createAnec = (anecdote) => {
+  return {
+    type: "CREATE_ANEC",
+    data: { content: anecdote, id: getId(), votes: 0 },
+  };
 };
 
 export default reducer;
