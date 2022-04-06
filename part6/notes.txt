@@ -31,3 +31,21 @@ reducer state must be composed of immutable objects
 replace old object entirely with new
 deep-freeze library to ensure that reducer is defined as immutable function
 npm install --save-dev deep-freeze
+uncontrolled forms are those that don't have state bound to them
+functions that create actions are called action creators
+hooks-api of the react-redux library to share redux store across app components
+npm install react-redux
+import { Provider } from 'react-redux'
+ <Provider store={store}></Provider>
+module can only have one default export, but multiple normal exports
+import { createNote, toggleImportanceOf } from './reducers/noteReducer'
+import { useSelector, useDispatch } from 'react-redux'
+const dispatch = useDispatch()
+const notes = useSelector(state => state)
+dispatch(createNote(content))
+actions called using useDispatch hook
+can access states in store using useSelector hook
+useSelector can search or select data from redux store
+- const importantNotes = useSelector(state => state.filter(note => note.important))  
+presentational component - simple and unaware that event handler it gets as props dispatches an action
+container component - defines what event handlers of containing components does and coordinates configuration of presentation components
