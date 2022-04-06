@@ -1,0 +1,33 @@
+currently learned about putting state and state logic in components
+Redux library to manage state of larger applications
+===part a flux-architecture and Redux===
+Facebook developed flux to make state management easier
+- state is stored separatly from components into their own stores
+- state in store is not changed directly, but with actions
+- when store state changes, view rerenders
+Action => Dispatcher => Store => View
+whole state of application is stored into one js object known as the store
+different things in the state would be stored as separate fields of the object
+actions are objects which have at least a field determining the type of action which changes state of the store
+{type: "INCREMENT"}
+impact of action to the state is defined using reducer.
+reducer is a function which is given current state and action as params and returns new state
+customary to use switchs instead of ifs in reducer
+reducer is given as parameter to redux createStore function
+import { createStore } from 'redux'
+const store = createStore(counterReducer)
+store uses reducer to handle actions with are sent with dispatch method
+store.dispatch({type: 'INCREMENT'})
+store.getState() to get store state
+store.subscribe(callback) to create callbacks for store to call when state is changed
+store.subscribe(() => {
+  const storeNow = store.getState()
+  console.log(storeNow)
+})
+actions may have type and field "data"
+pure functions are those that do not cause any side effects and must always return the same response when called with same params
+ex. use concat or [...state, action.data] instead of push()
+reducer state must be composed of immutable objects
+replace old object entirely with new
+deep-freeze library to ensure that reducer is defined as immutable function
+npm install --save-dev deep-freeze
