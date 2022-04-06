@@ -55,5 +55,21 @@ describe("Blog app", function () {
       cy.get(".create-btn").click();
       cy.contains("blog title");
     });
+
+    describe("and a blog exists", function () {
+      beforeEach(function () {
+        cy.createBlog({
+          title: "blog title",
+          author: "blog author",
+          url: "blog url",
+        });
+      });
+
+      it("can be liked", function () {
+        cy.get(".detail-btn").click();
+        cy.get(".like-btn").click();
+        cy.contains(1);
+      });
+    });
   });
 });
