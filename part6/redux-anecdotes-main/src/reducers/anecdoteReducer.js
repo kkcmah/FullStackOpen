@@ -1,3 +1,5 @@
+import { createSlice } from "@reduxjs/toolkit";
+
 const anecdotesAtStart = [
   "If it hurts, do it more often",
   "Adding manpower to a late software project makes it later!",
@@ -19,31 +21,52 @@ const asObject = (anecdote) => {
 
 const initialState = anecdotesAtStart.map(asObject);
 
-const reducer = (state = initialState, action) => {
-  console.log("state now: ", state);
-  console.log("action", action);
-  switch (action.type) {
-    case "VOTE":
-      const idToUpdate = action.data;
+const anecdoteSlice = createSlice({
+  name: "anecdote",
+  initialState,
+  reducers: {
+    createAnec(state, action) {
+      state.push({
+        content: action.payload,
+        id: getId(),
+        votes: 0,
+      });
+    },
+    voteAnec(state, action) {
+      const idToUpdate = action.payload;
       const anecToUpdate = state.find((a) => a.id === idToUpdate);
       const updatedAnec = { ...anecToUpdate, votes: anecToUpdate.votes + 1 };
       return state.map((anec) => (anec.id !== idToUpdate ? anec : updatedAnec));
-    case "CREATE_ANEC":
-      return [...state, action.data];
-    default:
-      return state;
-  }
-};
+    },
+  },
+});
 
-export const voteAnec = (id) => {
-  return { type: "VOTE", data: id };
-};
+export const { createAnec, voteAnec } = anecdoteSlice.actions;
+export default anecdoteSlice.reducer;
 
-export const createAnec = (anecdote) => {
-  return {
-    type: "CREATE_ANEC",
-    data: { content: anecdote, id: getId(), votes: 0 },
-  };
-};
+// const reducer = (state = initialState, action) => {
+//   console.log("state now: ", state);
+//   console.log("action", action);
+//   switch (action.type) {
+//     case "VOTE":
+//       const idToUpdate = action.data;
+//       const anecToUpdate = state.find((a) => a.id === idToUpdate);
+//       const updatedAnec = { ...anecToUpdate, votes: anecToUpdate.votes + 1 };
+//       return state.map((anec) => (anec.id !== idToUpdate ? anec : updatedAnec));
+//     case "CREATE_ANEC":
+//       return [...state, action.data];
+//     default:
+//       return state;
+//   }
+// };
 
-export default reducer;
+// export const voteAnec = (id) => {
+//   return { type: "VOTE", data: id };
+// };
+
+// export const createAnec = (anecdote) => {
+//   return {
+//     type: "CREATE_ANEC",
+//     data: { content: anecdote, id: getId(), votes: 0 },
+//   };
+// };

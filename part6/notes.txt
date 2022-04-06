@@ -49,3 +49,52 @@ useSelector can search or select data from redux store
 - const importantNotes = useSelector(state => state.filter(note => note.important))  
 presentational component - simple and unaware that event handler it gets as props dispatches an action
 container component - defines what event handlers of containing components does and coordinates configuration of presentation components
+===part b many reducers===
+same name attribute of radio buttons form a button group
+combineReducers function to combine existing reducers when you have states in different properties
+import { createStore, combineReducers } from 'redux'
+const reducer = combineReducers({
+  notes: noteReducer,
+  filter: filterReducer
+})
+combined reducer works in such a way that every action gets handled in every part of the combined reducer (looks like action is duplicated)
+redux toolkit library simplifies configuration of redux store and offers tools for easing state management
+npm install @reduxjs/toolkit
+use configureStore instead of createStore
+import { configureStore } from '@reduxjs/toolkit'
+const store = configureStore({
+  reducer: {
+    notes: noteReducer,
+    filter: filterReducer
+  }
+})
+^gets rid of combineReducers function
+redux toolkit createSlice function to create reducers and related actions
+import { createSlice } from '@reduxjs/toolkit'
+const noteSlice = createSlice({
+  name: 'notes',
+  initialState,
+  reducers: { 
+    createNote(....),
+    toggleImportanceOf(...)
+  }
+})
+- name defines prefix used in action's type values
+- ex. "notes/createNote"
+-- use unique names among reducers
+- initialState defines initial state
+- reducers parameter takes reducer itself as object with functions that handles actions
+-- action.payload now has the argument provided by calling action creator
+dispatch(createNote('Redux Toolkit is awesome!'))
+calls
+dispatch({ type: 'notes/createNote', payload: 'Redux Toolkit is awesome!' })
+state mutations allowed in createSlice
+- Redux Toolkit utilizes Immer with reducers createde by createSlice which allows state mutations
+- Immer uses mutated state to create new immutable state
+- handy for updating complex state
+createSlice function returns object containing reducer and action creators
+  export const { createNote, toggleImportanceOf } = noteSlice.actions
+  export default noteSlice.reducer
+Redux DevTools chrome addon useful for inspecting redux store state and dispatch actions via console
+- Redux tab in browser's console to use
+
