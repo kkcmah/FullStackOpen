@@ -79,5 +79,29 @@ describe("Blog app", function () {
         cy.get("html").should("not.contain", "blog title");
       });
     });
+
+    describe("and 3 blogs with varying likes exists", function () {
+      beforeEach(function () {
+        for (let i = 0; i < 3; i++) {
+          cy.createBlog({
+            title: `blog${i} title`,
+            author: `blog${i} author`,
+            url: `blog${i} url`,
+            likes: i,
+          });
+        }
+      });
+
+      it("should be ordered from most likes to least likes", function () {
+        let expected = [];
+        for (let i = 2; i >= 0; i--) {
+          expected.push(`blog${i} title`);
+        }
+
+        cy.get(".blog").each(($el, index) => {
+          cy.wrap($el).should("contain", expected[index]);
+        });
+      });
+    });
   });
 });
