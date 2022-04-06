@@ -70,6 +70,14 @@ describe("Blog app", function () {
         cy.get(".like-btn").click();
         cy.contains(1);
       });
+
+      it("can be deleted by the user who made it", function () {
+        cy.get(".detail-btn").click();
+        cy.get(".delete-btn").click();
+        // apparently dont need window confirm?
+        // cy.on("window:confirm", () => true);
+        cy.get("html").should("not.contain", "blog title");
+      });
     });
   });
 });
