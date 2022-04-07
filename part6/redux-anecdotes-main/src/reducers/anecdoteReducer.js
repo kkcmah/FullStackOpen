@@ -38,15 +38,25 @@ const anecdoteSlice = createSlice({
     setAnecs(state, action) {
       return action.payload;
     },
+    appendAnec(state, action) {
+      state.push(action.payload);
+    },
   },
 });
 
-export const { createAnec, voteAnec, setAnecs } = anecdoteSlice.actions;
+export const { voteAnec, setAnecs, appendAnec } = anecdoteSlice.actions;
 
 export const initializeAnecs = () => {
   return async (dispatch) => {
     const anecs = await anecdotesService.getAll();
     dispatch(setAnecs(anecs));
+  };
+};
+
+export const createAnec = (content) => {
+  return async (dispatch) => {
+    const newAnec = await anecdotesService.createNew(content);
+    dispatch(appendAnec(newAnec));
   };
 };
 
