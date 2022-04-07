@@ -48,3 +48,27 @@ const match = useMatch('/notes/:id')
     : null
 <Route path="/notes/:id" element={<Note note={note} />} />
 if url matches what is inside useMatch then match variable will contain object with which we can access the parameterized part of the path
+===part b custom hooks===
+recap of the rule of hooks
+- Don’t call Hooks inside loops, conditions, or nested functions
+- Don’t call Hooks from regular JavaScript functions.
+eslint complains if you use hook illegally
+can use custom hooks to extract component functions to reusable functions
+custom hook must start with use and adhere to rule of hooks
+spread attribute to pass props to element if attribute names are the same as what is being passed in
+const useField = (type) => {
+  const [value, setValue] = useState('')
+
+  const onChange = (event) => {
+    setValue(event.target.value)
+  }
+
+  return {
+    type,
+    value,
+    onChange
+  }
+}
+ const name = useField('text')
+ <input  {...name} />
+ 
