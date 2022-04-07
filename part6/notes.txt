@@ -117,4 +117,35 @@ export const initializeNotes = () => {
 helps separate logic away from components
 Redux toolkit offers tools for simplifying asynchronous state management
 ex. createAsyncThunk function and RTK Query API
-
+===part d connect===
+so far used useSelector and useDispatch hooks from react-redux
+older and more complicated way before the above is the connect function by react-redux
+connect function transforms regular react components so state of Redux store can be mapped to component props
+import { connect } from 'react-redux'
+const ConnectedNotes = connect()(Notes)
+export default ConnectedNotes
+connect function accepts mapStateToProps function as first param to define props based on store
+const ConnectedNotes = connect(mapStateToProps, mapDispatchToProps)(Notes)
+Notes has direct access to props.notes and props.filter
+second param of connect can be used for defining mapDispatchToProps which is a group of action creator functions passed to the connected component as props
+props.toggleImportanceOf(...)
+can pass null as first param if store state is unneeded
+export default connect(
+  null, 
+  { createNote }
+)(NewNote)
+functions passed in mapDispatchToProps must be action creators
+const mapDispatchToProps = dispatch => {
+  return {
+    createNote: value => {
+      dispatch(createNote(value))
+    },
+  }
+}
+^^most cases it is suffice to use simpler form but this complex form is necessary if props of component need to be referenced
+presentational vs container component
+connect function creates a connected component which fits the description of a container component
+higher order component is a function that accepts a regular component as a param and returns a new regular component
+use HOCS to define generic functionality
+HOCs are generalizations of HOFs like map, filter, find
+hooks are newer and simpler than HOCs
