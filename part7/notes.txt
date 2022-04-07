@@ -1,0 +1,49 @@
+This part covers several different topics.
+First look at React router which divides app into different views that are shown based on url in address bar
+Secondly, few more ways to add CSS
+Thirdly, look at how webpack works and configure app ourselves instad of using create-react-app
+Lastly, look at hooks and custom hooks
+===part a react-router===
+old web apps would make GET request and render HTML returned
+in SPAs HTTP request made simply fetch JSON formatted data to put in view
+React Router library for managing navigation in React app
+npm install react-router-dom
+import {
+  BrowserRouter as Router,
+  Routes, Route, Link
+} from "react-router-dom"
+<div>
+    <Link style={padding} to="/">home</Link>
+    <Link style={padding} to="/notes">notes</Link>
+    <Link style={padding} to="/users">users</Link>
+</div>
+<Routes>
+    <Route path="/notes" element={<Notes />} />
+    <Route path="/users" element={<Users />} />
+    <Route path="/" element={<Home />} />
+</Routes>
+routing, or conditional rendering of components based on url is used by placing components as children of the router component
+BrowserRouter user HTML5 history API to keep track of which urls have been visited in states
+URL changes but page is manipulated by js meaning browser doesnt load new content from server
+Link component defines links that modify the address bar
+<Link to="/notes">notes</Link>
+Route renders component based on the URL
+<Route path="/notes" element={<Notes />} />
+list of Routes work by rending the first component whose path matches the url in address bar
+parameterized routes defined as 
+<Route path="/notes/:id" element={<Note notes={notes} />} />
+import {useParams} from reach-router-dom
+const id = useParams().id
+useParams can be used to access the url parameter
+useNavigate can be used to change the browser url
+const navigate = useNavigate()
+navigate('/')
+redirect non logged in users to another view
+<Route path="/users" element={user ? <Users /> : <Navigate replace to="/login" />} />
+useMatch to figure out the id of the note to be displayed
+const match = useMatch('/notes/:id')
+  const note = match 
+    ? notes.find(note => note.id === Number(match.params.id))
+    : null
+<Route path="/notes/:id" element={<Note note={note} />} />
+if url matches what is inside useMatch then match variable will contain object with which we can access the parameterized part of the path
