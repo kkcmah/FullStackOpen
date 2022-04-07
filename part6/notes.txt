@@ -102,4 +102,19 @@ using json-server for development
 script "server": "json-server -p3001 --watch db.json",
 data in db.json
 can add dispatch to useeffect dependency array when getting initial data for state to disable lint warning
+reducer gets payload response from server and appends to state
+Redux Thunk library can implement async actions without needing to know about communication with server (ex. initialization or adding)
+npm install redux-thunk
+- can implement action creators which return a function instead of an object
+- function receives stores dispatch and getState methods as params
+- allows awaiting operation and dispatching action
+export const initializeNotes = () => {
+  return async dispatch => {
+    const notes = await noteService.getAll()
+    dispatch(setNotes(notes))
+  }
+}
+helps separate logic away from components
+Redux toolkit offers tools for simplifying asynchronous state management
+ex. createAsyncThunk function and RTK Query API
 
