@@ -32,6 +32,7 @@ Route renders component based on the URL
 list of Routes work by rending the first component whose path matches the url in address bar
 parameterized routes defined as 
 <Route path="/notes/:id" element={<Note notes={notes} />} />
+<Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
 import {useParams} from reach-router-dom
 const id = useParams().id
 useParams can be used to access the url parameter
