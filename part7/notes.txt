@@ -71,4 +71,172 @@ const useField = (type) => {
 }
  const name = useField('text')
  <input  {...name} />
- 
+ ===part c more about styles===
+ many UI frameworks such as Bootstrap come with ready made themes and components like buttons, tables 
+ will be looking at Bootstrap and MaterialUI
+ npm install react-bootstrap
+ then add link in index.html
+    <head>
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+        crossorigin="anonymous"
+    />
+    // ...
+    </head>
+In Bootstrap all contents of application are typically rendered inside of a container
+root div given container class attribute className="container"
+have to import React Bootstrap components
+import { Table } from 'react-bootstrap'
+other imports include Navbar, Table, Button...
+most UI frameworks are responsive ie works on rendering to different screen sizes
+MaterialUI react library implements visual language by Google
+npm install @material-ui/core
+load googles font Roboto
+    <head>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+    // ...
+    </head>
+render the contents of the whole app in a container
+<Container>//app components</Container>
+import {Container, Table, TableBody, TableRow...} from "@material-ui/core"
+Alert component in the lab package
+npm install @material-ui/lab
+import {Alert} from '@material-ui/lab'
+can also use Bootstrap by defining classes on HTML elements
+    <Table striped>
+    // ...
+    </Table>
+    <table className="table striped">
+    // ...
+    </table>
+some UI framework components require some unpleasant js dependencies and is up to developer if it is worthwhile to maintain
+Other UI frameworks include bulma, ant, chakra, tailwind, semanticui
+Styled Components offer a way to style components through tagged template literals
+npm install styled-components
+import styled from 'styled-components'
+
+    const Button = styled.button`
+    background: Bisque;
+    font-size: 1em;
+    margin: 1em;
+    padding: 0.25em 1em;
+    border: 2px solid Chocolate;
+    border-radius: 3px;
+    `
+
+    const Input = styled.input`
+    margin: 0.25em;
+    `
+^^creates styled versions of button and input HTML elements and assigns them
+===part d webpack===
+before create-react-app configuration was painful
+bundling = all source code is transformed into single containing application file
+npm run build under the hood bundles source code using webpack
+then index.html loads the app within script tag
+project structure
+├── build
+├── package.json
+├── src
+│   └── index.js
+└── webpack.config.js
+npm install --save-dev webpack webpack-cli
+new main.js will be added under build if run npm run build
+webpack only knows how to deal with plain js
+need loader when we include React because it is in JSX
+loaders inform webpack of the files that need to be processed before they are bundled
+loader: "babel-loader"
+npm install @babel/core babel-loader @babel/preset-react --save-dev
+npm install core-js regenerator-runtime
+to deal with async/await
+import dependencies at top of index.js
+import 'core-js/stable/index.js'
+import 'regenerator-runtime/runtime.js'
+Transpilers compile source code by transforming it from one language to another
+transpilation process executed by Babel is defined with plugins and most developers use ready made presets
+ex.  @babel/preset-react preset
+most browsers dont fully support ES7+ so have to transpile to ES5
+npm install @babel/preset-env --save-dev
+preset-env takes current ES versions
+ex. transpile from current ecmascript to ES5
+presets: ['@babel/preset-env', '@babel/preset-react']
+css loader to load css files
+style loader to generate and inject a style element that contains all the styles of app
+npm install style-loader css-loader --save-dev
+current workflow resembles java in which after every code change we have to bundle and refresh the browser
+webpack-dev-server offers solution
+npm install --save-dev webpack-dev-server
+when dev server is used the result of bundling exists in memory not in previous main.js
+asking webpack to generate source map makes it possible to map errors that occured during execution of bundle to original source code
+devtool: 'source-map',
+minify code to optimize its size (comes with webpack 4 onwards)
+"build": "webpack --mode=production",
+webpack's DefinePlugin for defining global default constants that can be used in the bundled code
+can inspect bundled production version of app using in build directory
+npx static-server
+by default it is at http://localhost:9080.
+because of axios using promises, internet explorer won't work
+polyfill is code that adds missing functionality to older browsers
+promise-polyfill to check if !window.Promise then window.Promise = PromisePolyFill
+use https://caniuse.com to check browser compatabilities
+create-react-app tool uses webpack behind the scenes
+can eject project to config and modified package.json
+no return when you eject a react app and have to do configurations manually
+===part e class components, miscellaneous===
+during course we have been using React components defined as js functions made possible with hooks
+existing old React code is written using classes
+class App extends React.Component
+constructor(props) {super(props) this.state={notes:[], cur:0}}
+render() {return (<div>)}
+class components only contain one state, so additional states have to be stored in additional properties of the state object
+lifecycle methods of Class component offer functionality similar to useEffect
+one is componentDidMount which is executed once right after the first time a component renders
+this.setState({ anecdotes: response.data }) to update state
+calling setState method always triggers and call the component's render method
+benefit of functional components is not having to deal with the "this" reference
+only benefit of class components over functional is error boundary mechanism
+no need to rewrite old React code as functional components
+have been creating frontend and backend in different repositories
+also been deploying bundled fontend served from backend
+can deploy frontend and backend separately
+can also put package.json and webpack.config.js into root with client and server directors for frontend and backend
+monitoring changes in the server
+can implement polling using setInterval to reflect changes in the server backend
+WebSockets are more sophisticated by allowing two way communication between browser and server
+socket.io library is advised because it provides fallback mechanism if browser doesnt support WebSockets
+Virtual DOM is stored in memory during runtime and is where the React elements reside
+ReactDOM library renders virtual DOM to the real DOM
+when app state changes, a new virtual DOM gets defined by components and React computes the most optimal way to modify previous virtual DOM
+Open Web Application Security Project OWASP publishes an annual list of the most common security risks in Web applications
+ex. sanitization and parameterizing SQL querys to prevent SQL injections
+ensure that React, Express and Node are up to date and secure
+npm audit can be used to check security of dependencies
+Broken Authentication and Broken Access Control reminds us to never trust data from the browser
+check and sanitize all data on the server's side
+add Helmet to backend 
+and using ESlint security-plugin is recommended
+Trends of js
+static type checking using Typescript
+server-side rendering for making app more SEO friendly
+isomorphic web application is one that performs rendering on both the front- and backend
+universal code is code that can be executed in most environments, meaning both the frontend and the backend
+Next.js is a good option for making universal applications
+Progressive web app PWA makes web applications work flawlessly in mobile, slow and offline environments usually with the help of service workers
+microservice architecture (microservices) is a way to compose the backend of an app from many separate independent services which communicate with each other over the network
+In a pure microservice architecture, the services do not use a shared database.
+ex. two services for bloglist app: one takes care of user, the other blogs
+contrary to microservices currently using monolithic backend
+serverless using lambdas that enables the execution of individual functions in the cloud.
+Other useful libraries:
+    - lodash to handle complicated data
+    - date-fns for times and dates
+    - Formik and redux-form for forms
+    - recharts and highcharts for displaying graphs
+    - immutable.js for immutable implementations
+    - redux-saga alternative to redux thunk async actions
+    - React Google analytics for gathering interactions between user and page
+    - React Native for mobile
+    -  site https://reactpatterns.com/ provides a concise list of best practices for React
+    
+
