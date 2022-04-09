@@ -5,7 +5,7 @@ import Notification from "./Notification";
 import Togglable from "./Togglable";
 import BlogForm from "./BlogForm";
 import { setNotification } from "../reducers/notificationReducer";
-import { createBlog, likeBlog, deleteBlog } from "../reducers/blogReducer";
+import { createBlog } from "../reducers/blogReducer";
 import { logoutUser } from "../reducers/userReducer";
 
 const Blogs = () => {
@@ -21,7 +21,7 @@ const Blogs = () => {
   };
 
   const handleCreateBlog = async (blogToCreate) => {
-    dispatch(createBlog(blogToCreate, user));
+    dispatch(createBlog(blogToCreate));
     dispatch(
       setNotification(
         `a new blog ${blogToCreate.title} by ${blogToCreate.author} added`,
@@ -30,14 +30,6 @@ const Blogs = () => {
       )
     );
     setVisible(false);
-  };
-
-  const handleLikeBlog = async (blogToLike) => {
-    dispatch(likeBlog(blogToLike));
-  };
-
-  const handleDeleteBlog = async (blogToDelete) => {
-    dispatch(deleteBlog(blogToDelete));
   };
 
   const handleUserLogout = () => {
@@ -59,13 +51,7 @@ const Blogs = () => {
         <BlogForm handleCreateBlog={handleCreateBlog}></BlogForm>
       </Togglable>
       {sortedBlogs.map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          user={user}
-          handleLikeBlog={handleLikeBlog}
-          handleDeleteBlog={handleDeleteBlog}
-        />
+        <Blog key={blog.id} blog={blog} />
       ))}
     </div>
   );

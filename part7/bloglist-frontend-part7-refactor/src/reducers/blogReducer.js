@@ -35,13 +35,11 @@ export const initializeBlogs = () => {
   };
 };
 
-export const createBlog = (newBlog, user) => {
+export const createBlog = (newBlog) => {
   return async (dispatch) => {
     try {
       const createdBlog = await blogsService.createBlog(newBlog);
-      dispatch(
-        appendBlog({ ...createdBlog, user: { username: user.username } })
-      );
+      dispatch(appendBlog(createdBlog));
     } catch (error) {
       dispatch(setNotification("Failed to create blog", true, 5));
     }
