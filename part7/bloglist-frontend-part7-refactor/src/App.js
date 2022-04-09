@@ -1,35 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import Blogs from "./components/Blogs";
 import Login from "./components/Login";
-import blogsService from "./services/blogs";
+import { loadUserLocalStorage } from "./reducers/userReducer";
+import { initializeBlogs } from "./reducers/blogReducer";
 
 const App = () => {
-  const [user, setUser] = useState(null);
+  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const locStoUser = window.localStorage.getItem("user");
-    if (locStoUser) {
-      const userParsed = JSON.parse(locStoUser);
-      setUser(userParsed);
-      blogsService.setToken(userParsed.token);
-    }
+    dispatch(loadUserLocalStorage());
   }, []);
 
-  const handleUserLogin = (loginUser) => {
-    blogsService.setToken(loginUser.token);
-    setUser(loginUser);
-    window.localStorage.setItem("user", JSON.stringify(loginUser));
-  };
-
-  const handleUserLogout = () => {
-    window.localStorage.removeItem("user");
-    setUser(null);
-  };
+  useEffect(() => {
+    if (user) dispatch(initializeBlogs());
+  }, [user]);
 
   if (user === null) {
-    return <Login handleUserLogin={handleUserLogin}></Login>;
+    return <Login></Login>;
   }
-  return <Blogs user={user} handleUserLogout={handleUserLogout}></Blogs>;
+  return <Blogs></Blogs>;
 };
 
 export default App;

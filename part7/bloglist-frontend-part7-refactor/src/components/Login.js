@@ -1,24 +1,18 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import loginService from "../services/login";
 import Notification from "./Notification";
-import { setNotification } from "../reducers/notificationReducer";
+import { loginUser } from "../reducers/userReducer";
 
-const Login = ({ handleUserLogin }) => {
+const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    try {
-      const user = await loginService.login({ username, password });
-      setUsername("");
-      setPassword("");
-      handleUserLogin(user);
-    } catch (error) {
-      dispatch(setNotification("wrong username or password", true, 5));
-    }
+    setUsername("");
+    setPassword("");
+    dispatch(loginUser(username, password));
   };
 
   return (
@@ -49,7 +43,9 @@ const Login = ({ handleUserLogin }) => {
           ></input>
         </div>
 
-        <button type="submit" id="login-btn">Login</button>
+        <button type="submit" id="login-btn">
+          Login
+        </button>
       </form>
     </div>
   );

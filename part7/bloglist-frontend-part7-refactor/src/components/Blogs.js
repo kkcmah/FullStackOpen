@@ -1,63 +1,47 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Blog from "./Blog";
 import Notification from "./Notification";
 import Togglable from "./Togglable";
 import BlogForm from "./BlogForm";
 import { setNotification } from "../reducers/notificationReducer";
-import {
-  initializeBlogs,
-  createBlog,
-  likeBlog,
-  deleteBlog,
-} from "../reducers/blogReducer";
+import { createBlog, likeBlog, deleteBlog } from "../reducers/blogReducer";
+import { logoutUser } from "../reducers/userReducer";
 
-const Blogs = ({ user, handleUserLogout }) => {
+const Blogs = () => {
   const [visible, setVisible] = useState(false);
-
+  const user = useSelector((state) => state.user);
   const blogs = useSelector((state) => state.blogs);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (user) dispatch(initializeBlogs());
-  }, []);
-
-  const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes);
+  const sortedBlogs = blogs.slice().sort((a, b) => b.likes - a.likes);
 
   const toggleVisibility = () => {
     setVisible(!visible);
   };
 
   const handleCreateBlog = async (blogToCreate) => {
-    try {
-      dispatch(createBlog(blogToCreate));
-      dispatch(
-        setNotification(
-          `a new blog ${blogToCreate.title} by ${blogToCreate.author} added`,
-          false,
-          5
-        )
-      );
-      setVisible(false);
-    } catch (error) {
-      dispatch(setNotification("Failed to create blog", true, 5));
-    }
+    dispatch(createBlog(blogToCreate, user));
+    dispatch(
+      setNotification(
+        `a new blog ${blogToCreate.title} by ${blogToCreate.author} added`,
+        false,
+        5
+      )
+    );
+    setVisible(false);
   };
 
   const handleLikeBlog = async (blogToLike) => {
-    try {
-      dispatch(likeBlog(blogToLike));
-    } catch (error) {
-      dispatch(setNotification("Failed to like blog", true, 5));
-    }
+    dispatch(likeBlog(blogToLike));
   };
 
   const handleDeleteBlog = async (blogToDelete) => {
-    try {
-      dispatch(deleteBlog(blogToDelete));
-    } catch (error) {
-      dispatch(setNotification("Failed to delete blog", true, 5));
-    }
+    dispatch(deleteBlog(blogToDelete));
+  };
+
+  const handleUserLogout = () => {
+    dispatch(logoutUser());
   };
 
   return (

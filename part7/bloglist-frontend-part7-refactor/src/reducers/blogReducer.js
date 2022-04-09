@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import blogsService from "../services/blogs";
+import { setNotification } from "./notificationReducer";
 
 const blogSlice = createSlice({
   name: "blog",
@@ -34,24 +35,38 @@ export const initializeBlogs = () => {
   };
 };
 
-export const createBlog = (newBlog) => {
+export const createBlog = (newBlog, user) => {
   return async (dispatch) => {
-    const createdBlog = await blogsService.createBlog(newBlog);
-    dispatch(appendBlog(createdBlog));
+    try {
+      const createdBlog = await blogsService.createBlog(newBlog);
+      dispatch(
+        appendBlog({ ...createdBlog, user: { username: user.username } })
+      );
+    } catch (error) {
+      dispatch(setNotification("Failed to create blog", true, 5));
+    }
   };
 };
 
 export const likeBlog = (blogToLike) => {
   return async (dispatch) => {
-    const likedBlog = await blogsService.likeBlog(blogToLike);
-    dispatch(updateBlog(likedBlog));
+    try {
+      const likedBlog = await blogsService.likeBlog(blogToLike);
+      dispatch(updateBlog(likedBlog));
+    } catch (error) {
+      dispatch(setNotification("Failed to like blog", true, 5));
+    }
   };
 };
 
 export const deleteBlog = (blogToDelete) => {
   return async (dispatch) => {
-    const deletedBlog = await blogsService.deleteBlog(blogToDelete);
-    dispatch(removeBlog(deletedBlog));
+    try {
+      await blogsService.deleteBlog(blogToDelete);
+      dispatch(removeBlog(blogToDelete));
+    } catch (error) {
+      dispatch(setNotification("Failed to delete blog", true, 5));
+    }
   };
 };
 
