@@ -1,28 +1,28 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Blog from "./Blog";
-import blogsService from "../services/blogs";
 import Notification from "./Notification";
 import Togglable from "./Togglable";
 import BlogForm from "./BlogForm";
 import { setNotification } from "../reducers/notificationReducer";
+import {
+  initializeBlogs,
+  createBlog,
+  likeBlog,
+  deleteBlog,
+} from "../reducers/blogReducer";
 
 const Blogs = ({ user, handleUserLogout }) => {
-  const [blogs, setBlogs] = useState([]);
-
   const [visible, setVisible] = useState(false);
 
+  const blogs = useSelector((state) => state.blogs);
   const dispatch = useDispatch();
 
-  const getSortedBlogs = async () => {
-    let blogs = await blogsService.getAll();
-    blogs.sort((a, b) => b.likes - a.likes);
-    setBlogs(blogs);
-  };
-
   useEffect(() => {
-    getSortedBlogs();
+    if (user) dispatch(initializeBlogs());
   }, []);
+
+  const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes);
 
   const toggleVisibility = () => {
     setVisible(!visible);
@@ -30,9 +30,7 @@ const Blogs = ({ user, handleUserLogout }) => {
 
   const handleCreateBlog = async (blogToCreate) => {
     try {
-      await blogsService.createBlog(blogToCreate);
-
-      getSortedBlogs();
+      dispatch(createBlog(blogToCreate));
       dispatch(
         setNotification(
           `a new blog ${blogToCreate.title} by ${blogToCreate.author} added`,
@@ -48,8 +46,7 @@ const Blogs = ({ user, handleUserLogout }) => {
 
   const handleLikeBlog = async (blogToLike) => {
     try {
-      await blogsService.likeBlog(blogToLike);
-      getSortedBlogs();
+      dispatch(likeBlog(blogToLike));
     } catch (error) {
       dispatch(setNotification("Failed to like blog", true, 5));
     }
@@ -57,9 +54,7 @@ const Blogs = ({ user, handleUserLogout }) => {
 
   const handleDeleteBlog = async (blogToDelete) => {
     try {
-      console.log(blogToDelete);
-      await blogsService.deleteBlog(blogToDelete);
-      getSortedBlogs();
+      dispatch(deleteBlog(blogToDelete));
     } catch (error) {
       dispatch(setNotification("Failed to delete blog", true, 5));
     }
@@ -79,7 +74,7 @@ const Blogs = ({ user, handleUserLogout }) => {
       >
         <BlogForm handleCreateBlog={handleCreateBlog}></BlogForm>
       </Togglable>
-      {blogs.map((blog) => (
+      {sortedBlogs.map((blog) => (
         <Blog
           key={blog.id}
           blog={blog}

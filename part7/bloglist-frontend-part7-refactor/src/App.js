@@ -27,18 +27,9 @@ const App = () => {
   };
 
   if (user === null) {
-    return (
-      <Login
-        handleUserLogin={handleUserLogin}
-      ></Login>
-    );
+    return <Login handleUserLogin={handleUserLogin}></Login>;
   }
-  return (
-    <Blogs
-      user={user}
-      handleUserLogout={handleUserLogout}
-    ></Blogs>
-  );
+  return <Blogs user={user} handleUserLogout={handleUserLogout}></Blogs>;
 };
 
 export default App;
