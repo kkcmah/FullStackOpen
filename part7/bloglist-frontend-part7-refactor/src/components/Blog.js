@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
-import { likeBlog, deleteBlog } from "../reducers/blogReducer";
+import { likeBlog, deleteBlog, addComment } from "../reducers/blogReducer";
 import { setNotification } from "../reducers/notificationReducer";
 
 const Blog = () => {
+  const [comment, setComment] = useState("");
   const { id } = useParams();
   const user = useSelector((state) => state.user);
   const blog = useSelector((state) =>
@@ -41,6 +43,11 @@ const Blog = () => {
     }
   };
 
+  const handleAddComment = () => {
+    dispatch(addComment(blog.id, { comment }));
+    setComment("");
+  };
+
   return (
     <div>
       <h2>{blog.title}</h2>
@@ -58,6 +65,20 @@ const Blog = () => {
           remove
         </button>
       )}
+      <h3>comments</h3>
+      <input
+        type="text"
+        name="comment"
+        placeholder="Enter comment here"
+        value={comment}
+        onChange={({ target }) => setComment(target.value)}
+      ></input>
+      <button onClick={handleAddComment}>add comment</button>
+      <ul>
+        {blog.comments.map((comment, index) => (
+          <li key={index}>{comment}</li>
+        ))}
+      </ul>
     </div>
   );
 };

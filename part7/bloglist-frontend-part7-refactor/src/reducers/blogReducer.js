@@ -46,6 +46,17 @@ export const createBlog = (newBlog) => {
   };
 };
 
+export const addComment = (blogId, comment) => {
+  return async (dispatch) => {
+    try {
+      const updatedBlog = await blogsService.addComment(blogId, comment);
+      dispatch(updateBlog(updatedBlog));
+    } catch (error) {
+      dispatch(setNotification("Failed to comment", true, 5));
+    }
+  };
+};
+
 export const likeBlog = (blogToLike) => {
   return async (dispatch) => {
     try {

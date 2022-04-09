@@ -40,6 +40,14 @@ blogRouter.post("/", async (request, response) => {
   response.status(201).json(savedBlog);
 });
 
+blogRouter.post("/:id/comments", async (request, response) => {
+  const { comment } = request.body;
+  const updatedBlog = await Blog.findById(request.params.id);
+  updatedBlog.comments = [...updatedBlog.comments, comment]
+  await updatedBlog.save();
+  response.json(updatedBlog);
+});
+
 blogRouter.put("/:id", async (request, response) => {
   const body = request.body;
   const blog = {
