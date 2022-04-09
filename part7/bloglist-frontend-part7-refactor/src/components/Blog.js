@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { likeBlog, deleteBlog, addComment } from "../reducers/blogReducer";
 import { setNotification } from "../reducers/notificationReducer";
+import { Button } from "@material-ui/core";
 
 const Blog = () => {
   const [comment, setComment] = useState("");
@@ -55,15 +56,25 @@ const Blog = () => {
       <div>{blog.url}</div>
       <div>
         {blog.likes}
-        <button className="like-btn" onClick={handlelikeBlog}>
+        <Button
+          variant="outlined"
+          color="primary"
+          className="like-btn"
+          onClick={handlelikeBlog}
+        >
           like
-        </button>
+        </Button>
       </div>
       {blogMaker && <div>added by {blogMaker.name}</div>}
       {showRemoveBtn && (
-        <button className="delete-btn" onClick={handledeleteBlog}>
+        <Button
+          variant="outlined"
+          color="primary"
+          className="delete-btn"
+          onClick={handledeleteBlog}
+        >
           remove
-        </button>
+        </Button>
       )}
       <h3>comments</h3>
       <input
@@ -73,7 +84,9 @@ const Blog = () => {
         value={comment}
         onChange={({ target }) => setComment(target.value)}
       ></input>
-      <button onClick={handleAddComment}>add comment</button>
+      <Button variant="outlined" color="primary" onClick={handleAddComment}>
+        add comment
+      </Button>
       <ul>
         {blog.comments.map((comment, index) => (
           <li key={index}>{comment}</li>

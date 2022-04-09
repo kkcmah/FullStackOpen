@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Routes, Route } from "react-router-dom";
+import Container from '@material-ui/core/Container'
 import Blogs from "./components/Blogs";
 import Login from "./components/Login";
 import Header from "./components/Header";
@@ -28,7 +29,7 @@ const App = () => {
   }, [user]);
 
   return (
-    <div>
+    <Container>
       <Header></Header>
       <Routes>
         <Route path="/" element={user ? <Blogs /> : <Login></Login>} />
@@ -36,7 +37,7 @@ const App = () => {
         <Route path="/users/:id" element={<User></User>} />
         <Route path="/blogs/:id" element={<Blog></Blog>} />
       </Routes>
-    </div>
+    </Container>
   );
 };
 

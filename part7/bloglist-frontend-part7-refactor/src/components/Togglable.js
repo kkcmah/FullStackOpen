@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { Button } from "@material-ui/core";
 
 const Togglable = ({ children, toggleVisibility, visible, buttonLabel }) => {
   const hideWhenVisible = { display: visible ? "none" : "" };
@@ -7,11 +8,11 @@ const Togglable = ({ children, toggleVisibility, visible, buttonLabel }) => {
   return (
     <div>
       <div style={hideWhenVisible}>
-        <button onClick={toggleVisibility}>{buttonLabel}</button>
+        <Button variant="outlined" onClick={toggleVisibility}>{buttonLabel}</Button>
       </div>
       <div style={showWhenVisible}>
         {children}
-        <button onClick={toggleVisibility}>cancel</button>
+        <Button variant="outlined" onClick={toggleVisibility}>cancel</Button>
       </div>
     </div>
   );
