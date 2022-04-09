@@ -8,6 +8,7 @@ import Header from "./components/Header";
 import { loadUserLocalStorage } from "./reducers/userReducer";
 import { initializeBlogs } from "./reducers/blogReducer";
 import Users from "./components/Users";
+import User from "./components/User";
 
 const App = () => {
   const user = useSelector((state) => state.user);
@@ -27,6 +28,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={user ? <Blogs /> : <Login></Login>} />
         <Route path="/users" element={<Users></Users>} />
+        <Route path="/users/:id" element={<User></User>} />
       </Routes>
     </div>
   );
