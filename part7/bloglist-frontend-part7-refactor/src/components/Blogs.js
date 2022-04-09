@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Blog from "./Blog";
 import Togglable from "./Togglable";
 import BlogForm from "./BlogForm";
 import { setNotification } from "../reducers/notificationReducer";
 import { createBlog } from "../reducers/blogReducer";
+import { Link } from "react-router-dom";
 
 const Blogs = () => {
   const [visible, setVisible] = useState(false);
@@ -29,6 +29,14 @@ const Blogs = () => {
     setVisible(false);
   };
 
+  const blogStyle = {
+    paddingTop: 10,
+    paddingLeft: 2,
+    border: "solid",
+    borderWidth: 1,
+    marginBottom: 5,
+  };
+
   return (
     <div>
       <Togglable
@@ -39,7 +47,11 @@ const Blogs = () => {
         <BlogForm handleCreateBlog={handleCreateBlog}></BlogForm>
       </Togglable>
       {sortedBlogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
+        <div style={blogStyle} className="blog" key={blog.id}>
+          <Link to={`/blogs/${blog.id}`}>
+            {blog.title} by {blog.author}
+          </Link>
+        </div>
       ))}
     </div>
   );
