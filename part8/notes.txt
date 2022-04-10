@@ -1,0 +1,135 @@
+Will be learning about GraphQL, Facebook's alternative to REST for communication between browser and server
+===part a GraphQL - server===
+REST is resource based and all resources has its own address which identifies it
+ex. /users/10 and all operations done are via HTTP requests
+complex data retrieval would take multiple REST requests oftentimes returning unnceccesary data in the process
+principle of GraphQL is that browser code forms a query describing data wanted
+all GraphQL queries are sent to the same address with type POST
+heart of all GraphQL applications is a schema for describing data sent between client and server
+    type Person {
+        name: String!
+        phone: String
+        street: String!
+        city: String!
+        id: ID! 
+    }
+    type Query {
+        personCount: Int!
+        allPersons: [Person!]!
+        findPerson(name: String!): Person
+    }
+String is a scalar type of GraphQL
+exclamation mark denotes required field
+ID is string but GraphQL ensures its uniqueness
+schema describes what kind of params query can have, and what kind of data can be sent and received to and from the server
+query {
+  allPersons {
+    name
+    phone
+  }
+}
+query must describe which fields of the object the query returns
+non-exclamation mark means that return value can be null
+will be using Apollo Server
+npm install apollo-server graphql
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+})
+heart of code is ApolloServer which is given two parameters
+typeDefs containing GraphQL schema
+and resolves object which defines how GraphQL queries are responded to
+When Apollo server is run in development mode the page http://localhost:4000 has a button Query your server that takes us to Apollo Studio Explorer.
+^useful for making queries
+resolve for ex. fetching single person
+(root, args) => persons.find(p => p.name === args.name)
+all resolver functions are given four parameters
+Apollo defines default resolvers if we dont define ourselves
+ex. default
+    Person: {
+        name: (root) => root.name,
+        phone: (root) => root.phone,
+        street: (root) => root.street,
+        city: (root) => root.city,
+        id: (root) => root.id
+    }
+if object saved do not have a certain field then default resolver is not sufficient and we have to define our own
+ex. Person: {
+    address: (root) => {
+      return { 
+        street: root.street,
+        city: root.city
+      }
+    }
+  }
+whenever Person object is returned the other fields are returned using their default resolvers whereas address uses self-defined resolver
+param root if the Person object so fields can be taken
+Mutations are operations that cause a change ex. add person
+type Mutation {
+  addPerson(
+    name: String!
+    phone: String
+    street: String!
+    city: String!
+  ): Person
+}
+Mutation is given details of person as params with phone being nullable
+Mutation returns Person if successful and null if not successful
+Mutation also requires a resolver
+const resolvers = {
+  // ...
+  Mutation: {
+    addPerson: (root, args) => {
+      const person = { ...args, id: uuid() }
+      persons = persons.concat(person)
+      return person
+    }
+  }
+}
+some error handling is done via GraphQL validation but more complex cases handled by error handling mechanism of Apollo Server
+const {UserInputError} = require("apollo-server")
+//...
+addPerson: (root, args) => {
+      if (persons.find(p => p.name === args.name)) {
+        throw new UserInputError('Name must be unique', {
+          invalidArgs: args.name,
+        })
+      }
+use enum to filter queries
+query {
+  allPersons(phone: YES) {
+    name
+    phone 
+  }
+}
+enum YesNo {
+  YES
+  NO
+}
+....allPersons(phone: YesNo): [Person!]!....
+resolver changes to
+allPersons: (root, args) => {
+    if (!args.phone) {
+      return persons
+    }
+    const byPhone = (person) =>
+      args.phone === 'YES' ? person.phone : !person.phone
+    return persons.filter(byPhone)
+  },
+possible to combine multiple fields of type Query into one query
+query {
+  personCount
+  allPersons {
+    name
+  }
+}
+can also use same query but supply different names
+query {
+  havePhone: allPersons(phone: YES){
+    name
+  }
+  phoneless: allPersons(phone: NO){
+    name
+  }
+}
+beneficial to name queries expecially when queries or mutations have parameters
