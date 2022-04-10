@@ -133,3 +133,56 @@ query {
   }
 }
 beneficial to name queries expecially when queries or mutations have parameters
+===part b React and GraphQL===
+Relay by Facebook or Apollo Client to communicate with server from client
+in new react project
+note: apollo may not work with newest version of React either downgrade React or force update ignore
+npm install @apollo/client graphql
+import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache, gql } from '@apollo/client'
+const client = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: new HttpLink({
+    uri: 'http://localhost:4000',
+  })
+})
+const query = gql'query { allPersons ....}
+client.query({query}).then.....
+app can communicate with server using client object
+wrap App with <ApolloProvider client={client}>
+useQuery hook to make queries
+const ALL_PERSONS = gql`query {...
+const result = useQuery(ALL_PERSONS)
+useQuery returns object with multiple fields one is loading which is true if no response yet
+result.data.allPersons contains data
+use GraphQL variables to pass params dynamically
+query findPersonByName($nameToSearch: String!) {
+  findPerson(name: $nameToSearch) {
+useLazyQuery or useQuery with option skip to execute query based on condition
+const result = useQuery(FIND_PERSON, {
+    variables: { nameToSearch },
+    skip: !nameToSearch,
+  })
+Apollo client saves responses of queries to cache and will not send same query again
+useMutation hook provides mutation making functionality
+const CREATE_PERSON = gql`.....
+const [ createPerson ] = useMutation(CREATE_PERSON)
+createPerson({  variables: { name, phone, street, city } })
+useMutation returns an array first being function to cause mutation
+can make query poll to update cache
+const result = useQuery(ALL_PERSONS, {
+    pollInterval: 2000
+^causes unncessary web traffic
+can use refetchQueries param to run when new person is created
+refetchQueries: [ { query: ALL_PERSONS } ]
+can separate queries into own file queries.js:
+export const CREATE_PERSON.... ALL_PERSON...
+can register error handler function to useMutation's onError option
+then use setError to set error
+const [ createPerson ] = useMutation(CREATE_PERSON, {
+  onError: (error) => {
+      setError(error.graphQLErrors[0].message)
+    }
+if result of mutation is null GraphQL sees it as non error, but we can use result field to handle
+const [ changeNumber, result ] = useMutation(EDIT_NUMBER)
+in useEffect if (result.data && result.data.editNumber === null) deps array [result.data]
+esLint warning about setError missing can just ignore line
