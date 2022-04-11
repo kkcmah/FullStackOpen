@@ -1,4 +1,4 @@
-const { ApolloServer, gql } = require("apollo-server");
+const { ApolloServer, gql, UserInputError } = require("apollo-server");
 require("dotenv").config();
 const mongoose = require("mongoose");
 const Book = require("./models/book");
@@ -75,16 +75,36 @@ const resolvers = {
       let existingAuthor = await Author.findOne({ name: args.author });
       if (!existingAuthor) {
         const newAuthor = new Author({ name: args.author });
-        existingAuthor = await newAuthor.save();
+        try {
+          existingAuthor = await newAuthor.save();
+        } catch (error) {
+          throw new UserInputError(error.message, {
+            invalidArgs: args,
+          });
+        }
       }
       const book = new Book({ ...args, author: existingAuthor });
-      return book.save();
+      try {
+        await book.save();
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        });
+      }
+      return book;
     },
     editAuthor: async (root, args) => {
       const existingAuthor = await Author.findOne({ name: args.name });
-      if (!existingAuthor) return null;
+      if (!existingAuthor) throw new UserInputError("author does not exist");
       existingAuthor.born = args.setBornTo;
-      return existingAuthor.save();
+      try {
+        await existingAuthor.save();
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        });
+      }
+      return existingAuthor;
     },
   },
 };
