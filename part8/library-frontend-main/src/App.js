@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useApolloClient, useQuery } from "@apollo/client";
-import { ALL_AUTHORS, ALL_BOOKS } from "./queries";
+import { ALL_AUTHORS, ALL_BOOKS, ME } from "./queries";
 
 import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import LoginForm from "./components/LoginForm";
+import Recommendations from "./components/Recommendations"
 
 const App = () => {
   const [page, setPage] = useState("authors");
@@ -15,8 +16,9 @@ const App = () => {
 
   const resultAuthors = useQuery(ALL_AUTHORS);
   const resultBooks = useQuery(ALL_BOOKS);
+  const resultMe = useQuery(ME)
 
-  if (resultAuthors.loading || resultBooks.loading)
+  if (resultAuthors.loading || resultBooks.loading || resultMe.loading)
     return <div>Loading...</div>;
 
   const notify = (msg) => {
@@ -47,6 +49,7 @@ const App = () => {
         <button onClick={() => setPage("authors")}>authors</button>
         <button onClick={() => setPage("books")}>books</button>
         <button onClick={() => setPage("add")}>add book</button>
+        <button onClick={() => setPage("recommend")}>recommend</button>
         <button onClick={logout}>logout</button>
       </div>
 
@@ -61,6 +64,8 @@ const App = () => {
       <Books books={resultBooks.data.allBooks} show={page === "books"} />
 
       <NewBook setError={notify} show={page === "add"} />
+
+      <Recommendations genre={resultMe.data.me.favoriteGenre} show={page === "recommend"}></Recommendations>
     </div>
   );
 };
