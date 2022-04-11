@@ -186,3 +186,63 @@ if result of mutation is null GraphQL sees it as non error, but we can use resul
 const [ changeNumber, result ] = useMutation(EDIT_NUMBER)
 in useEffect if (result.data && result.data.editNumber === null) deps array [result.data]
 esLint warning about setError missing can just ignore line
+===part c database and user administration===
+using Mongoose and Apollo
+npm install mongoose
+define schema
+const schema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    minlength: 5
+  },....
+module.exports = mongoose.model('Person', schema)
+good practice to keep validation in database
+GraphQL automatically parses mongo _id to id
+resolver functions now return promises (before normal objects) and Apollo server sends back resolved value
+allPersons: async (root, args) => {
+  return Person.find({})
+},
+roughly translate to
+Person.find({}).then( result => {
+  // return the result 
+})
+now that validation is added to schema must wrap save() methods in try/catch
+try {
+    await person.save()
+  } catch (error) {
+    throw new UserInputError(error.message, {
+      invalidArgs: args,
+    })
+expand server object by adding third param context
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: async ({ req }) => {
+    const auth = req ? req.headers.authorization : null
+    if (auth && auth.toLowerCase().startsWith('bearer ')) {
+      const decodedToken = jwt.verify(
+        auth.substring(7), JWT_SECRET
+      )
+      const currentUser = await User.findById(decodedToken.id).populate('friends')
+      return { currentUser }
+    }
+  }
+})
+object returned by context is given to all resolvers as their third param
+context is where you do things shared by multiple resolves like user identification
+currentUser field of context is set to user or undefined if no user connected
+Query: {
+  // ...
+  me: (root, args, context) => {
+    return context.currentUser
+  }
+},
+me query returns null if no valid token is attached to request
+in mutation:
+const currentUser = context.currentUser
+
+    if (!currentUser) {
+      throw new AuthenticationError("not authenticated")
+    }
+If a logged-in user cannot be found from the context, an AuthenticationError is thrown
