@@ -34,6 +34,7 @@ const App = () => {
       {error && <div style={{ color: "red" }}>error: {error}</div>}
 
       <Authors
+        setError={notify}
         authors={resultAuthors.data.allAuthors}
         show={page === "authors"}
       />
