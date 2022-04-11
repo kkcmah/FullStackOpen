@@ -246,3 +246,34 @@ const currentUser = context.currentUser
       throw new AuthenticationError("not authenticated")
     }
 If a logged-in user cannot be found from the context, an AuthenticationError is thrown
+=== part d login and updating the cache===
+for frontend add state for token
+define mutation for logging in
+export const LOGIN = gql`mutation logn($username: String!, $password: String!)`
+logout user by setting token state to null, remove token from local storage, and reset cache of Apollo client
+^important to reset cache in case of cached sensitive data
+resetStore method of Apollo client object to reset cache
+useApolloClient hook to access client object
+const client = useApolloClient()
+const logout = () => {
+    setToken(null)
+    localStorage.clear()
+    client.resetStore()
+  }
+redefine ApolloClient to add authorization header to requests
+link param given to client defines how Apollo connects to server
+const client = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: authLink.concat(httpLink)
+})
+can provide update callback for mutation which Apollo runs after mutation
+const [ createPerson, result ] = useMutation(CREATE_PERSON, {
+    update: (cache, response) => {
+      cache.updateQuery({ query: ALL_PERSONS }, ({ allPersons }) => {
+        return {
+          allPersons: allPersons.concat(response.data.addPerson),
+        }
+callback function given reference to cache and data returned by mutation
+updateQuery updates specified queries in cache
+can disable caching by setting fetchPolicy as no-cache
+old data in cache can cause annoying bugs
