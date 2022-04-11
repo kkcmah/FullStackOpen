@@ -13,6 +13,7 @@ const Books = ({ show, books }) => {
   if (filteredBooks.loading) return <div>Loading...</div>;
 
   const filterGenre = (genre) => {
+    filteredBooks.refetch();
     setGenre(genre);
   };
 
