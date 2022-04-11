@@ -8,12 +8,20 @@ import NewBook from "./components/NewBook";
 
 const App = () => {
   const [page, setPage] = useState("authors");
+  const [error, setError] = useState(null);
 
   const resultAuthors = useQuery(ALL_AUTHORS);
   const resultBooks = useQuery(ALL_BOOKS);
 
   if (resultAuthors.loading || resultBooks.loading)
     return <div>Loading...</div>;
+
+  const notify = (msg) => {
+    setError(msg);
+    setTimeout(() => {
+      setError(null);
+    }, 5000);
+  };
 
   return (
     <div>
@@ -23,6 +31,8 @@ const App = () => {
         <button onClick={() => setPage("add")}>add book</button>
       </div>
 
+      {error && <div style={{ color: "red" }}>error: {error}</div>}
+
       <Authors
         authors={resultAuthors.data.allAuthors}
         show={page === "authors"}
@@ -30,7 +40,7 @@ const App = () => {
 
       <Books books={resultBooks.data.allBooks} show={page === "books"} />
 
-      <NewBook show={page === "add"} />
+      <NewBook setError={notify} show={page === "add"} />
     </div>
   );
 };
