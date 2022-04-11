@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { EDIT_AUTHOR } from "../queries";
 
 const Authors = (props) => {
-  const [name, setName] = useState("");
+  const [name, setName] = useState(props.authors[0].name);
   const [born, setBorn] = useState("");
 
   const [updateAuthor, result] = useMutation(EDIT_AUTHOR, {
@@ -25,7 +25,6 @@ const Authors = (props) => {
     e.preventDefault();
 
     updateAuthor({ variables: { name, setBornTo: +born } });
-    setName("");
     setBorn("");
   };
 
