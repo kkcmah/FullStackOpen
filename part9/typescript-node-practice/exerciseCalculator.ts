@@ -8,6 +8,28 @@ interface Result {
   average: number;
 }
 
+interface ExerciseInputs {
+  target: number;
+  exerciseHours: number[];
+}
+
+const parseArgsExercise = (args: Array<string>): ExerciseInputs => {
+  if (args.length < 4)
+    throw new Error("supply >2 args as such <target> <hour1> <hour2>...");
+
+  const target = +args[2];
+  if (isNaN(target)) throw new Error("Please supply target as number");
+
+  const argsNum = args.slice(3).map(Number);
+  for (const num of argsNum) {
+    if (isNaN(num)) throw new Error("Please only supply numeric values");
+  }
+  return {
+    target,
+    exerciseHours: argsNum,
+  };
+};
+
 const calculateExercises = (
   exerciseHours: number[],
   target: number
@@ -39,4 +61,14 @@ const calculateExercises = (
   };
 };
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+// npm run calculateExercises 2 1 0 2 4.5 0 3 1 0 4
+try {
+  const { target, exerciseHours } = parseArgsExercise(process.argv);
+  console.log(calculateExercises(exerciseHours, target));
+} catch (error: unknown) {
+  let errorMsg = "Something bad happened ";
+  if (error instanceof Error) {
+    errorMsg += error.message;
+  }
+  console.log(errorMsg);
+}
