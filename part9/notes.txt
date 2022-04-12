@@ -1,0 +1,31 @@
+This part is about Typescript Superset of js develoepd by Microsoft
+===part a background and introduction===
+Typescript offers better dev time tooling, static code analysis, compile time type checking and code level documentation
+typescript transpiles into javescript and version of transpilation can be configured
+Type annotations to record intended contract of function or variables
+type inference from params
+any type is a wildcard
+void is absence of any type
+types are removed at runtime by type erasure
+external libraries may not have their own types defined and we may have to write types ourselves or grab from github
+typescript error messages have most useful information at the end
+===part b first steps with typescript===
+ts-node package compiles and executes ts immediately so no need for separate build compilation step
+npm install --save-dev ts-node typescript
+setup script "ts-node": "ts-node"
+tsconfig.json for configs
+can config how strict the compiler is, which files to watch or ignore, and etc
+const multiplicator = (a: number, b: number, printText: string): number =>
+typescript will let you know if you try to call funcion with invalid param types
+can create custom type using type
+type Operation = 'multiply' | 'add' | 'divide';
+union type is created by using |
+type keyword defines new name for type called type alias
+unknown is a top type safe counterpart of any - anything is assignable to unknown but unknown isnt assignable to anything but itself and any without type assertions
+Usually, types for existing packages can be found from the @types organization within npm
+Definitely typed community project maintains types for all major packages
+npm install --save-dev @types/express @types/lodash @types/jest @types/mongoose......
+NaN is actually type number check using isNaN
+interface keyword to define shape object should have
+
+
