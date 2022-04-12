@@ -27,5 +27,11 @@ Definitely typed community project maintains types for all major packages
 npm install --save-dev @types/express @types/lodash @types/jest @types/mongoose......
 NaN is actually type number check using isNaN
 interface keyword to define shape object should have
+going to work with express ts npm install express and add script "start": "ts-node index.js"
+may have some warnings with express types
+npm install --save-dev @types/express
+ts-node-dev is ts equilvalent alternative of nodemon
+npm install --save-dev ts-node-dev
+
 
 
