@@ -12,6 +12,7 @@ const { SubscriptionServer } = require("subscriptions-transport-ws");
 const User = require("./models/user");
 const typeDefs = require("./schema");
 const resolvers = require("./resolvers");
+const loaders = require("./loaders");
 
 mongoose
   .connect(process.env.MONGODB_URI, {
@@ -52,7 +53,7 @@ const start = async () => {
         const decodedToken = jwt.verify(auth.substring(7), process.env.SECRET);
         // may need .populate here if User also has an object field User.findById(...).populate("friends")
         const currentUser = await User.findById(decodedToken.id);
-        return { currentUser };
+        return { currentUser, loaders: { bookCount: loaders.bookCountLoader } };
       }
     },
     plugins: [

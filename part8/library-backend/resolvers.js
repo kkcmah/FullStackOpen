@@ -25,8 +25,8 @@ const resolvers = {
     },
   },
   Author: {
-    bookCount: async (root) => {
-      return Book.find({ author: root.id }).countDocuments();
+    bookCount: async (root, args, context) => {
+      return await context.loaders.bookCount.load(root.id);
     },
   },
   Mutation: {
