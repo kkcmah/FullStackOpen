@@ -1,19 +1,12 @@
-import { useQuery } from "@apollo/client";
-import { useState } from "react";
-import { ALL_BOOKS } from "../queries";
-
-const Books = ({ show, books }) => {
-  const [genre, setGenre] = useState(null);
-  const filteredBooks = useQuery(ALL_BOOKS, { variables: { genre } });
-
+const Books = ({ show, books, filteredBooks, genre, setGenre }) => {
   if (!show) {
     return null;
   }
 
   if (filteredBooks.loading) return <div>Loading...</div>;
 
-  const filterGenre = (genre) => {
-    filteredBooks.refetch();
+  const filterGenre = async (genre) => {
+    await filteredBooks.refetch();
     setGenre(genre);
   };
 
