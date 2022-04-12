@@ -277,3 +277,66 @@ callback function given reference to cache and data returned by mutation
 updateQuery updates specified queries in cache
 can disable caching by setting fetchPolicy as no-cache
 old data in cache can cause annoying bugs
+===part e fragments and subscriptions===
+use fragments to simplify queries that return similar results
+first declare fragment for selecting all fields of type
+fragment PersonDetails on Person {
+  name
+  phone .....
+then can do queries in compact form
+query {
+  allPersons {
+    ...PersonDetails
+fragments defined not in GraphQL schema but in client
+declare fragment once and save to variable
+const PERSON_DETAILS = gql`
+  fragment PersonDetails on Person {
+    id....
+fragment can then be placed in any query using dollar sign and curly braces
+export const FIND_PERSON = gql`
+  query findPersonByName($nameToSearch: String!) {
+    findPerson(name: $nameToSearch) {
+      ...PersonDetails
+    }
+  }
+  ${PERSON_DETAILS}
+GraphQL offers subscriptions to listen to changes on the server
+when change occurs on server, all subsribers are notified
+Apollo uses websockets for subscriber communication
+refactor schemas to schema.js, resolvers to resolvers.js
+use Apollo Server Express
+npm install apollo-server-express apollo-server-core express @graphql-tools/schema
+implement subscription for notifications 
+type Subscription {
+  personAdded: Person!
+}    
+^when person is added all subscribers get sent Person
+install two packages for adding subscriptions to GraphQL
+npm install subscriptions-transport-ws graphql-subscriptions
+subscription personAdded needs resolver and addPerson resolver has to be modified to send notifications
+subscriptions use publish-subscribe principle using PubSub object
+all subscribers registered by returning them a iterator object
+have to configure index.js on frontend to handle subscriptions
+split from @apollo/client
+import { getMainDefinition } from '@apollo/client/utilities'
+import { WebSocketLink } from '@apollo/client/link/ws'
+npm install @apollo/client subscriptions-transport-ws
+configure HTTP connection and WebSocket connection to GraphQL server
+useSubscription hook to subscribe
+useSubscription(PERSON_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      console.log(subscriptionData)
+callback function onSubscriptionData is called with new person details as param when person is added 
+update Apollo cache when new data received
+client.cache.updateQuery({ query: ALL_PERSONS }, ({ allPersons }) => {
+        return {
+          allPersons: allPersons.concat(addedPerson),
+  ^^^^put this in useSubscription hook callback
+initial problem of person added to cache and rendered twice because another component is also adding to cache
+make a function that uses set to take care of manipulating cache
+enable mongoose debugging using
+mongoose.set('debug', true);
+n+1 problem app gets data and loops through data to get more data
+solution may be to use join query
+can use fourth param of resolver for further optimization, but only when necessary
+Facebooks DataLoader may help with n+1 problem
