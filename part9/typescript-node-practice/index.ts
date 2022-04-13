@@ -10,8 +10,8 @@ app.get("/hello", (_req, res) => {
 
 //localhost:3003/bmi?height=180&weight=72.
 app.get("/bmi", (req, res) => {
-  let height = req.query.height as string;
-  let weight = req.query.weight as string;
+  const height = req.query.height as string;
+  const weight = req.query.weight as string;
 
   if (!height || !weight) {
     return res.status(400).json({ error: "malformatted parameters" });
@@ -24,15 +24,11 @@ app.get("/bmi", (req, res) => {
     return res.status(400).json({ error: "malformatted parameters" });
   }
 
-  try {
-    return res.json({
-      weight: weightKg,
-      height: heightCm,
-      bmi: calculateBmi(heightCm, weightKg),
-    });
-  } catch (error) {
-    return res.status(400).json({ error: error.message });
-  }
+  return res.json({
+    weight: weightKg,
+    height: heightCm,
+    bmi: calculateBmi(heightCm, weightKg),
+  });
 });
 
 const PORT = 3003;
