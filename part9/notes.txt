@@ -75,4 +75,17 @@ another way is to declare new type
 export type NonSensitiveDiaryEntry = Omit<DiaryEntry, 'comment'>;
 typescript doesn't modify actual data, but only its types
 so we have to exclude fields ourselves
-
+typescript warns if using Array.find would return undefined
+add a new type that omits id field to handle adding new data
+id will be generated on backend
+should parse and validate each field of data we are receiving
+use unknown for type coming for input validation
+type guard function returns boolean and has a type predicate as the return type
+predicate form parameterName is Type
+ex. text is string
+two ways to create strings normal or with constructor
+better to have this: return typeof text === 'string' || text instanceof String;
+instead of type aliase for weather, use enum which allows usage at runtime, not only in compilation
+unknown type doesnt allow operations
+can fix by destructuring fields to variables of type unknown
+or use type any and disable lint for line

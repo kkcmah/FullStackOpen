@@ -4,14 +4,21 @@ export interface Diagnose {
   latin?: string;
 }
 
+export enum Gender {
+  Male = "male",
+  Female = "female",
+  Other = "other",
+}
+
 export interface Patient {
   id: string;
   name: string;
   dateOfBirth: string;
   ssn: string;
-  gender: string;
+  gender: Gender;
   occupation: string;
 }
 
 // omit is a utility type
-export type getAllPatientsOmitSensitive = Omit<Patient, "ssn">;
+export type PatientsOmitSensitive = Omit<Patient, "ssn">;
+export type NewPatient = Omit<Patient, "id">;
