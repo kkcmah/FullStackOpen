@@ -110,3 +110,10 @@ interface MyProps {
 }
 can also do inline
   const MyComp4 = ({ label, price }: { label: string, price: number }) => {
+consider courseParts having different attributes
+can make types for different part structurs and union them
+string literal portion should be able to differentiate types
+can then make base with common attributes and extend it to create part specific types
+one way to handle union types in component is using switch case expressions
+using an identifying attribute that is distinct to each type (mainly derived from a base type)
+exhaustive type checking. Its basic principle is that if we encounter an unexpected value, we call a function that accepts a value with the type never and also has the return type never.

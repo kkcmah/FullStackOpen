@@ -1,8 +1,9 @@
-interface totalProps {
-  courseParts: { name: string; exerciseCount: number }[];
+import { CoursePart } from "../types";
+interface TotalProps {
+  courseParts: CoursePart[];
 }
 
-const Total = ({ courseParts }: totalProps) => {
+const Total = ({ courseParts }: TotalProps) => {
   return (
     <p>
       Number of exercises{" "}
