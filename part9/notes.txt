@@ -32,6 +32,7 @@ may have some warnings with express types
 npm install --save-dev @types/express
 ts-node-dev is ts equilvalent alternative of nodemon
 npm install --save-dev ts-node-dev
+script: "dev": "ts-node-dev index.ts",
 
 
 
