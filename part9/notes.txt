@@ -38,6 +38,24 @@ implicit any typings can lead to problems
 can use eslint to further enforce coding style
 npm install --save-dev eslint @typescript-eslint/eslint-plugin @typescript-eslint/parser
 script to inspect "lint": "eslint --ext .ts ."
-
-
+===part c typing the express app===
+TypeScript's Native Compiler (tsc) can help us initialize
+npm install typescript --save-dev
+script "tsc": "tsc"
+can initialize tsconfig.json settings with
+npm run tsc -- --init
+extra -- before are args for npm whereas after are for tsc
+bunch of configs in tsconfig.json file
+outDir tells where to place compiled code
+esModuleInterop allows interoperability between CommonJS and ES Modules
+npm install express
+npm install --save-dev eslint @types/express @typescript-eslint/eslint-plugin @typescript-eslint/parser
+npm install --save-dev ts-node-dev
+scripts
+    "dev": "ts-node-dev index.ts",
+    "lint": "eslint --ext .ts ."
+npm run tsc would then compile to outDir
+add .eslintignore file to ignore build
+can add npm script to run app in production mode
+"start": "node build/index.js"
 
