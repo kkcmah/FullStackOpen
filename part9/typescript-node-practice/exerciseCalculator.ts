@@ -30,7 +30,7 @@ const parseArgsExercise = (args: Array<string>): ExerciseInputs => {
   };
 };
 
-const calculateExercises = (
+export const calculateExercises = (
   exerciseHours: number[],
   target: number
 ): Result => {
@@ -62,13 +62,15 @@ const calculateExercises = (
 };
 
 // npm run calculateExercises 2 1 0 2 4.5 0 3 1 0 4
-try {
-  const { target, exerciseHours } = parseArgsExercise(process.argv);
-  console.log(calculateExercises(exerciseHours, target));
-} catch (error: unknown) {
-  let errorMsg = "Something bad happened ";
-  if (error instanceof Error) {
-    errorMsg += error.message;
+if (require.main === module) {
+  try {
+    const { target, exerciseHours } = parseArgsExercise(process.argv);
+    console.log(calculateExercises(exerciseHours, target));
+  } catch (error: unknown) {
+    let errorMsg = "Something bad happened ";
+    if (error instanceof Error) {
+      errorMsg += error.message;
+    }
+    console.log(errorMsg);
   }
-  console.log(errorMsg);
 }

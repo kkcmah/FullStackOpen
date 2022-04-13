@@ -37,6 +37,7 @@ every untyped variable whose type cannot be inferred implicitly becomes type any
 implicit any typings can lead to problems
 can use eslint to further enforce coding style
 npm install --save-dev eslint @typescript-eslint/eslint-plugin @typescript-eslint/parser
+script to inspect "lint": "eslint --ext .ts ."
 
 
 

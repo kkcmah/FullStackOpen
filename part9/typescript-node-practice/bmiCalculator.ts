@@ -28,7 +28,7 @@ export const calculateBmi = (heightCm: number, weightKg: number): string => {
 };
 
 // npm run calculateBmi 180 91
-if (process.argv) {
+if (require.main === module) {
   try {
     const { heightCm, weightKg } = parseArgsBmi(process.argv);
     console.log(calculateBmi(heightCm, weightKg));
