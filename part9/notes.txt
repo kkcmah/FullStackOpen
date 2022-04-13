@@ -58,4 +58,21 @@ npm run tsc would then compile to outDir
 add .eslintignore file to ignore build
 can add npm script to run app in production mode
 "start": "node build/index.js"
+code in this part of the course is structured a bit differently
+index.js moved to src
+src/controllers nameds to src/routes
+in index route requests to specific routers app.use('/api/diary',diaryRouter)
+separate business logic from router code using services
+ts compiler will warn us if we attempt to put wrong type in object
+becareful when using assertions can cause runtime error
+ensure each file in flat directory have unique name so that imports don't get confused
+utility type pick to enforce sensitive data is not used
+const getNonSensitiveEntries =
+  (): Array<Pick<DiaryEntry, 'id' | 'date' | 'weather' | 'visibility'>> => {
+or use omit to exclude fields
+const getNonSensitiveEntries = (): Omit<DiaryEntry, 'comment'>[] => {
+another way is to declare new type
+export type NonSensitiveDiaryEntry = Omit<DiaryEntry, 'comment'>;
+typescript doesn't modify actual data, but only its types
+so we have to exclude fields ourselves
 
