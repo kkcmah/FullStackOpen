@@ -8,6 +8,14 @@ router.get("/", (_req, res) => {
   res.json(patientService.getAllPatientsOmitSensitive());
 });
 
+router.get("/:id", (req, res) => {
+  const patient = patientService.getPatientById(req.params.id);
+  if (!patient) {
+    res.status(400).end();
+  }
+  res.json(patient);
+});
+
 router.post("/", (req, res) => {
   try {
     const newPatient = toNewPatient(req.body);

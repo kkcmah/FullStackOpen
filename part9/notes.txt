@@ -117,3 +117,16 @@ can then make base with common attributes and extend it to create part specific 
 one way to handle union types in component is using switch case expressions
 using an identifying attribute that is distinct to each type (mainly derived from a base type)
 exhaustive type checking. Its basic principle is that if we encounter an unexpected value, we call a function that accepts a value with the type never and also has the return type never.
+can use interfaces or type aliases
+defined interfaces with same name will be merged
+whereas, types with same name will throw error saying type already defined
+TypeScript docs recommends interfaces in most cases
+before working with existing codebase check out readmes, package.json, types.ts, test files
+react useContext for sharing global data for tree of React components such as authenticated user, theme, or language
+good to add union with undefined if incoming data can not exist
+map object automatically requires you to perform validity checks on data retrieved from map
+ Map<string, Patient>
+await axios.get<Patient[]>
+passing type param to axios does not validate data
+it-ts library can provide validation for data coming from external APIs
+good to create custom validation functions to take payload and return correct types or type guards
