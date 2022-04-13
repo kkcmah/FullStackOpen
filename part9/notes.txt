@@ -89,3 +89,24 @@ instead of type aliase for weather, use enum which allows usage at runtime, not 
 unknown type doesnt allow operations
 can fix by destructuring fields to variables of type unknown
 or use type any and disable lint for line
+===part d react with types===
+want typescript to catch errors:
+  Trying to pass an extra/unwanted prop to a component
+  Forgetting to pass a required prop to a component
+  Passing a prop of a wrong type to a component
+can use create react app to create typescript react app
+npx create-react-app my-app --template typescript
+tsconfig lib includes type of browser APIs to project
+allowJs for mixing ts and js
+can loosen some rules
+return type of basically all React components is JSX.Element or null
+config linter to parse *.tsx files
+add script "lint": "eslint './src/**/*.{ts,tsx}'"
+or "eslint \"./src/**/*.{ts,tsx}\"" for windows
+will use an interface for the parameter types (i.e., props) and JSX.Element as the return type for any react component
+interface MyProps {
+  label: string;
+  price?: number;
+}
+can also do inline
+  const MyComp4 = ({ label, price }: { label: string, price: number }) => {
