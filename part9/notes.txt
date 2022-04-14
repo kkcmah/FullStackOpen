@@ -130,3 +130,9 @@ await axios.get<Patient[]>
 passing type param to axios does not validate data
 it-ts library can provide validation for data coming from external APIs
 good to create custom validation functions to take payload and return correct types or type guards
+using utility type such as omit on union types causes unexpected results
+instead define special omit like function
+  // Define special omit for unions
+  type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
+  // Define Entry without the 'id' property
+  type EntryWithoutId = UnionOmit<Entry, 'id'>;
