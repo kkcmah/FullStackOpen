@@ -9,7 +9,7 @@ import { Patient, Gender } from "../types";
 import { apiBaseUrl } from "../constants";
 
 const PatientListPage = () => {
-  const [{ patient }, dispatch] = useStateValue();
+  const [{ patient, diagnoses }, dispatch] = useStateValue();
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
@@ -29,7 +29,17 @@ const PatientListPage = () => {
     void getPatient();
   }, []);
 
-  if (!patient) return <div>Loading...</div>;
+  const findCodeDesc = (code: string): string => {
+    const diagnosis = diagnoses.find((d) => {
+      return d.code === code;
+    });
+    if (diagnosis) {
+      return diagnosis.name;
+    }
+    return "";
+  };
+
+  if (!patient || patient.id !== id) return <div>Loading...</div>;
 
   return (
     <div>
@@ -50,7 +60,9 @@ const PatientListPage = () => {
             {entry.diagnosisCodes && (
               <ul>
                 {entry.diagnosisCodes.map((code) => (
-                  <li key={code}>{code}</li>
+                  <li key={code}>
+                    {code} {findCodeDesc(code)}
+                  </li>
                 ))}
               </ul>
             )}
