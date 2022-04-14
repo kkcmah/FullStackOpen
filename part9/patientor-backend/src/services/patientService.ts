@@ -19,7 +19,7 @@ const getAllPatientsOmitSensitive = (): PatientOmitSensitive[] => {
 const getPatientById = (id: string): Patient | undefined => {
   const patient = patients.find((p) => p.id === id);
   if (!patient) return undefined;
-  return { ...patient, entries: [] };
+  return { ...patient };
 };
 
 const addPatient = (newPatient: NewPatient): Patient => {
