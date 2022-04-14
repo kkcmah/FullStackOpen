@@ -1,4 +1,14 @@
-import { NewPatient, Gender } from "./types";
+import {
+  NewPatient,
+  Gender,
+  NewEntry,
+  EntryType,
+  HealthCheckRating,
+  NewEntryBase,
+  NewHospitalEntry,
+  NewHealthCheckEntry,
+  NewOccupationalHealthcareEntry,
+} from "./types";
 
 const isString = (text: unknown): text is string => {
   return typeof text === "string" || text instanceof String;
@@ -51,7 +61,7 @@ const parseOccupation = (occupation: unknown): string => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const toNewPatient = (object: any): NewPatient => {
+export const toNewPatient = (object: any): NewPatient => {
   const newPatient: NewPatient = {
     name: parseName(object.name),
     dateOfBirth: parseDate(object.dateOfBirth),
@@ -63,4 +73,161 @@ const toNewPatient = (object: any): NewPatient => {
   return newPatient;
 };
 
-export default toNewPatient;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const isEntryType = (param: any): param is EntryType => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  return Object.values(EntryType).includes(param);
+};
+
+const parseType = (type: unknown): EntryType => {
+  if (!type || !isEntryType(type)) {
+    throw new Error("Incorrect or missing type: " + type);
+  }
+  return type;
+};
+
+const parseDescription = (desc: unknown): string => {
+  if (!desc || !isString(desc)) {
+    throw new Error("Incorrect or missing description " + desc);
+  }
+  return desc;
+};
+
+const parseDiagnosisCodes = (codes: unknown): string[] => {
+  if (!codes || !Array.isArray(codes)) {
+    throw new Error("Incorrect or missing diagnostic codes " + codes);
+  }
+
+  return codes.map((code) => parseName(code));
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const isHealthCheckRating = (param: any): param is HealthCheckRating => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  return Object.values(HealthCheckRating).includes(param);
+};
+
+const parseHealthCheckRating = (rating: unknown): HealthCheckRating => {
+  if (!rating || !isHealthCheckRating(rating)) {
+    throw new Error("Incorrect or missing health check rating " + rating);
+  }
+  return rating;
+};
+
+const isSickLeave = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  param: any
+): param is { startDate: string; endDate: string } => {
+  if (
+    !param.startDate ||
+    !param.endDate ||
+    !isString(param.startDate) ||
+    !isDate(param.startDate as string) ||
+    !isString(param.endDate) ||
+    !isDate(param.endDate as string)
+  ) {
+    return false;
+  }
+  return true;
+};
+
+const parseSickLeave = (
+  sickLeave: unknown
+): { startDate: string; endDate: string } => {
+  if (!sickLeave || !isSickLeave(sickLeave)) {
+    throw new Error("Incorrect or missing sick leave " + sickLeave);
+  }
+  return sickLeave;
+};
+
+const isDischarge = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  param: any
+): param is { date: string; criteria: string } => {
+  if (
+    !param.date ||
+    !param.criteria ||
+    !isString(param.date) ||
+    !isDate(param.date as string) ||
+    !isString(param.criteria)
+  ) {
+    return false;
+  }
+  return true;
+};
+
+const parseDischarge = (
+  discharge: unknown
+): { date: string; criteria: string } => {
+  if (!discharge || !isDischarge(discharge)) {
+    throw new Error("Incorrect or missing discharge " + discharge);
+  }
+  return discharge;
+};
+
+const toNewHealthCheckEntry = (
+  baseEntry: NewEntryBase,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  obj: any
+): NewHealthCheckEntry => {
+  const newEntry: NewHealthCheckEntry = {
+    type: EntryType.HealthCheck,
+    ...baseEntry,
+    healthCheckRating: parseHealthCheckRating(obj.healthCheckRating),
+  };
+  return newEntry;
+};
+
+const toNewOccupationalHealthcareEntry = (
+  baseEntry: NewEntryBase,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  obj: any
+): NewOccupationalHealthcareEntry => {
+  const newEntry: NewOccupationalHealthcareEntry = {
+    type: EntryType.OccupationalHealthcare,
+    ...baseEntry,
+    employerName: parseName(obj.employerName),
+  };
+  if (obj.sickLeave) {
+    newEntry.sickLeave = parseSickLeave(obj.sickLeave);
+  }
+  return newEntry;
+};
+
+const toNewHospitalEntry = (
+  baseEntry: NewEntryBase,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  obj: any
+): NewHospitalEntry => {
+  const newEntry: NewHospitalEntry = {
+    type: EntryType.Hospital,
+    ...baseEntry,
+    discharge: parseDischarge(obj.discharge),
+  };
+  return newEntry;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const toNewEntry = (object: any): NewEntry => {
+  const newEntryBase: NewEntryBase = {
+    description: parseDescription(object.description),
+    date: parseDate(object.date),
+    specialist: parseName(object.specialist),
+  };
+
+  if (object.diagnosisCodes) {
+    newEntryBase.diagnosisCodes = parseDiagnosisCodes(object.diagnosisCodes);
+  }
+
+  const type = parseType(object.type);
+
+  if (type === EntryType.HealthCheck) {
+    return toNewHealthCheckEntry(newEntryBase, object);
+  } else if (type === EntryType.OccupationalHealthcare) {
+    return toNewOccupationalHealthcareEntry(newEntryBase, object);
+  } else if (type === EntryType.Hospital) {
+    return toNewHospitalEntry(newEntryBase, object);
+  } else {
+    throw new Error("Failed to create new entry check if type is correct");
+  }
+};

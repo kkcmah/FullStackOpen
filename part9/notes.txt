@@ -136,3 +136,14 @@ instead define special omit like function
   type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
   // Define Entry without the 'id' property
   type EntryWithoutId = UnionOmit<Entry, 'id'>;
+material ui icons provides some icons you can use
+Formik package for handling forms instead of fiddling around with React form handling
+Formik simplifies form state values, validation and errors, and form submissions
+onSubmit: (values: PatientFormValues) => void;
+^^ prop callback function that receives values and returns void
+Formik ErrorMessage component to render an error message
+or by using prop form form.errors
+Formik validate prop that expects a validation function and returns an object containing possible errors
+Formik <Form> to render form
+dirty if user has edited values
+can pass prop callbacks to the form

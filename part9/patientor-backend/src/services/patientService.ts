@@ -1,6 +1,12 @@
 import { v4 as uuidv4 } from "uuid";
 import patients from "../../data/patients";
-import { PatientOmitSensitive, NewPatient, Patient } from "../types";
+import {
+  PatientOmitSensitive,
+  NewPatient,
+  Patient,
+  Entry,
+  NewEntry,
+} from "../types";
 
 const getAllPatientsOmitSensitive = (): PatientOmitSensitive[] => {
   // actually have to ensure that we omit the fields we dont want
@@ -32,4 +38,19 @@ const addPatient = (newPatient: NewPatient): Patient => {
   return addedPatient;
 };
 
-export default { getAllPatientsOmitSensitive, addPatient, getPatientById };
+const addEntry = (newEntry: NewEntry, patientId: string): Entry => {
+  const patientIndex = patients.findIndex((p) => p.id === patientId);
+  const addedEntry = {
+    id: uuidv4(),
+    ...newEntry,
+  };
+  patients[patientIndex].entries.push(addedEntry);
+  return addedEntry;
+};
+
+export default {
+  getAllPatientsOmitSensitive,
+  addPatient,
+  getPatientById,
+  addEntry,
+};
