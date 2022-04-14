@@ -4,7 +4,7 @@ import axios from "axios";
 import FemaleIcon from "@mui/icons-material/Female";
 import MaleIcon from "@mui/icons-material/Male";
 
-import { useStateValue } from "../state";
+import { setPatient, useStateValue } from "../state";
 import { Patient, Gender } from "../types";
 import { apiBaseUrl } from "../constants";
 
@@ -19,7 +19,7 @@ const PatientListPage = () => {
           const { data: patientData } = await axios.get<Patient>(
             `${apiBaseUrl}/patients/${id}`
           );
-          dispatch({ type: "ADD_INDIVIDUAL_PATIENT", payload: patientData });
+          dispatch(setPatient(patientData));
         } catch (error) {
           console.log(error);
         }
