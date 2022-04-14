@@ -7,9 +7,10 @@ import MaleIcon from "@mui/icons-material/Male";
 import { setPatient, useStateValue } from "../state";
 import { Patient, Gender } from "../types";
 import { apiBaseUrl } from "../constants";
+import EntryDetails from "./EntryDetails";
 
 const PatientListPage = () => {
-  const [{ patient, diagnoses }, dispatch] = useStateValue();
+  const [{ patient }, dispatch] = useStateValue();
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
@@ -29,16 +30,6 @@ const PatientListPage = () => {
     void getPatient();
   }, []);
 
-  const findCodeDesc = (code: string): string => {
-    const diagnosis = diagnoses.find((d) => {
-      return d.code === code;
-    });
-    if (diagnosis) {
-      return diagnosis.name;
-    }
-    return "";
-  };
-
   if (!patient || patient.id !== id) return <div>Loading...</div>;
 
   return (
@@ -52,22 +43,7 @@ const PatientListPage = () => {
       <div>occupation: {patient.occupation}</div>
       <h3>entries</h3>
       {patient.entries.map((entry) => {
-        return (
-          <div key={entry.id}>
-            <div>
-              {entry.date} {entry.description}
-            </div>
-            {entry.diagnosisCodes && (
-              <ul>
-                {entry.diagnosisCodes.map((code) => (
-                  <li key={code}>
-                    {code} {findCodeDesc(code)}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        );
+        return <EntryDetails key={entry.id} entry={entry}></EntryDetails>;
       })}
     </div>
   );
