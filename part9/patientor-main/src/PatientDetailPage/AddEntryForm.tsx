@@ -23,6 +23,10 @@ const healthCheckRatingOptions = [
 const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
   const [{ diagnoses }] = useStateValue();
 
+  const isValidDate = (date: string) => {
+    return Boolean(Date.parse(date));
+  };
+
   return (
     <Formik
       initialValues={{
@@ -36,12 +40,16 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
       onSubmit={onSubmit}
       validate={(values) => {
         const requiredError = "Field is required";
+        const invalidDate = "Date is invalid. Format: YYYY-MM-DD";
         const errors: { [field: string]: string } = {};
         if (!values.description) {
           errors.description = requiredError;
         }
         if (!values.date) {
           errors.date = requiredError;
+        }
+        if (!isValidDate(values.date)) {
+          errors.date = invalidDate;
         }
         if (!values.specialist) {
           errors.specialist = requiredError;
