@@ -7,7 +7,7 @@ export interface Diagnosis {
 export enum Gender {
   Male = "male",
   Female = "female",
-  Other = "other"
+  Other = "other",
 }
 
 export interface Patient {
@@ -27,6 +27,12 @@ export enum HealthCheckRating {
   "CriticalRisk" = 3,
 }
 
+export enum EntryType {
+  HealthCheck = "HealthCheck",
+  OccupationalHealthcare = "OccupationalHealthcare",
+  Hospital = "Hospital",
+}
+
 export interface BaseEntry {
   id: string;
   description: string;
@@ -35,7 +41,7 @@ export interface BaseEntry {
   diagnosisCodes?: Array<Diagnosis["code"]>;
 }
 
-interface HealthCheckEntry extends BaseEntry {
+export interface HealthCheckEntry extends BaseEntry {
   type: "HealthCheck";
   healthCheckRating: HealthCheckRating;
 }
@@ -55,3 +61,8 @@ export type Entry =
   | HospitalEntry
   | OccupationalHealthcareEntry
   | HealthCheckEntry;
+
+export type EntryFormValues = { type: EntryType } & Omit<BaseEntry, "id"> &
+  Partial<Omit<HospitalEntry, "type">> &
+  Partial<Omit<OccupationalHealthcareEntry, "type">> &
+  Partial<Omit<HealthCheckEntry, "type">>;
