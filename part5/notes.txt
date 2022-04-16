@@ -34,7 +34,7 @@ can also save identity of signed in user as httpOnly cookies
 - probably best to implement both tokens and cookies and have backend construct authentication using both
 ===part b props.children and proptypes===
 can set style inline using code with style attribute
-can warp components with other components
+can wrap components with other components
 props.children then references the child components of the component
 child components are React elements defined between opening and closing tags
 children props is automatically added by React and always exists

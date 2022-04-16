@@ -1,4 +1,4 @@
-This part is about Typescript Superset of js develoepd by Microsoft
+This part is about Typescript Superset of js developed by Microsoft
 ===part a background and introduction===
 Typescript offers better dev time tooling, static code analysis, compile time type checking and code level documentation
 typescript transpiles into javescript and version of transpilation can be configured
@@ -60,7 +60,7 @@ can add npm script to run app in production mode
 "start": "node build/index.js"
 code in this part of the course is structured a bit differently
 index.js moved to src
-src/controllers nameds to src/routes
+src/controllers named to src/routes
 in index route requests to specific routers app.use('/api/diary',diaryRouter)
 separate business logic from router code using services
 ts compiler will warn us if we attempt to put wrong type in object

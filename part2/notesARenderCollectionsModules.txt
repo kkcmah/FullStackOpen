@@ -31,7 +31,7 @@ promise - object representing eventual completion or failure of an asynchronous 
 - use then as event handler to access result of operation represented by promise
 effect hooks
 - effect hooks lets you perform side effects in function components
-    -data fetching, setting up subscriptions, and manually chaning the dom
+    -data fetching, setting up subscriptions, and manually changing the dom
 call to state updating function triggers rerendering of component
 - useEffect takes two parameters useEffect(hook, [])
 - first is function; the effect itself
